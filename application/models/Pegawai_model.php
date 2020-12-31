@@ -7,6 +7,7 @@ class Pegawai_model extends MY_Model
 {
 
     public $table = 'pegawai';
+    protected $perPage = 3;
 
     public function getValidationRules()
     {
@@ -91,6 +92,12 @@ class Pegawai_model extends MY_Model
             [
                 'field' => 'id_jabatan',
                 'label' => 'Jabatan',
+                'rules' => 'required'
+            ],
+
+            [
+                'field' => 'id_level',
+                'label' => 'Tingkatan Pegawai',
                 'rules' => 'required'
             ],
 

@@ -202,7 +202,7 @@
                                     </div>
                                     <input type="number" class="form-control" id="durasi_kerja_pegawai" name="durasi_kerja" placeholder="Durasi" disabled>
                                 </div>
-                                
+
                             </div>
                             <div class="col-md-4">
                                 <label for="simpleDataInput">Satuan Durasi</label>
@@ -213,7 +213,7 @@
 
 
                                 </select>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -255,6 +255,27 @@
 
                                     </select>
                                     <span id="id_jabatan_error"></span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="simpleDataInput">Tingkatan Pegawai</label>
+                                <div class="level">
+                                    <select class="form-control" id="id_level_pegawai" name="id_level">
+                                        <option value="">- Pilih Tingkatan -</option>
+                                        <?php foreach ($level as $row) : ?>
+                                            <option value="<?= $row->id; ?>"><?= $row->nama_level; ?></option>
+                                        <?php endforeach ?>
+
+                                    </select>
+                                    <span id="id_level_error"></span>
                                 </div>
 
                             </div>

@@ -13,3 +13,15 @@
 <div id="wadahModalEditJabatan">
 
 </div>
+
+<div id="wadahModalTambahLevel">
+
+</div>
+
+<div id="wadahModalEditLevel">
+
+</div>
+
+<div id="wadahModalDetailPegawai">
+
+</div>

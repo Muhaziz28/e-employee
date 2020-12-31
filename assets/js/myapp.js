@@ -12,8 +12,29 @@ $(document).ready(function () {
         autoclose: true,
     });
 
+    //cek if page reloaded
+    if (performance.navigation.type == 1) {
+        remove_hash_from_url();
+    } else {
+        if (window.location.hash == '#success') {
+            tata.success('Success', 'Data Berhasil Ditambahkan!', {
+                onClick: null
+            });
+        }
+    }
 
+    //to remove hash from url
+    function remove_hash_from_url() {
+        var uri = window.location.toString();
 
+        if (uri.indexOf("#") > 0) {
+            var clean_uri = uri.substring(0,
+                uri.indexOf("#"));
+
+            window.history.replaceState({},
+                document.title, clean_uri);
+        }
+    }
 
     //show modal add divisi
     $(document).on('click', '#btnTambahDivisi', function (e) {
@@ -131,7 +152,7 @@ $(document).ready(function () {
                     if (data.error == true) {
                         if (data.nama_divisi_error != '') {
                             $('#nama_divisi_error').html(data.nama_divisi_error);
-                            $('#nama_divisi').removeClass('is-valid').addClass('is-invalid');
+                            $('#nama_divisi_edit').removeClass('is-valid').addClass('is-invalid');
 
                         }
                     }
@@ -262,7 +283,7 @@ $(document).ready(function () {
 
     });
 
-    //show modal edit divisi
+    //show modal edit jabatan
     $(document).on('click', '#btnEditJabatan', function (e) {
         e.preventDefault();
         let id = $(this).data('id');
@@ -333,7 +354,7 @@ $(document).ready(function () {
         });
     });
 
-    //delete data jaabtan
+    //delete data jabatan
     $(document).on('click', '#btnDeleteJabatan', function (e) {
         e.preventDefault();
 
@@ -386,6 +407,169 @@ $(document).ready(function () {
             }
         });
     }
+
+    //show modal add level
+    $(document).on('click', '#btnTambahLevel', function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: base_url + 'level/showForm'
+
+        })
+            .done(function (data) {
+                $('#wadahModalTambahLevel').html(data);
+                $('#modal-add-level').modal('show');
+            });
+    });
+
+    //add data level
+    $(document).on('submit', '#formTambahLevel', function (e) {
+        e.preventDefault();
+
+        //get value from form
+        let nama_level = $('#nama_level').val();
+        let ket = $('#ket').val();
+
+        //do ajax
+        $.ajax({
+            url: base_url + 'level/insert',
+            method: "POST",
+            data: {
+                nama_level: nama_level,
+                ket: ket
+            },
+            success: function (data) {
+                var data = JSON.parse(data);
+                if (data.statusCode == 200) {
+                    loadTableLevel('level/loadTable');
+                    $('#formTambahLevel')[0].reset();
+
+                    //show message success
+                    tata.success('Success', 'Data Berhasil Ditambahkan!');
+
+                    //remove invalid validation style in form input
+                    $('#nama_level_error').html('');
+                    $('#nama_level').removeClass('is-invalid');
+                } else if (data.statusCode == 201) {
+                    //do something
+                } else {
+                    //if form validation is false
+                    if (data.error == true) {
+                        console.log(data.nama_level_error);
+                        if (data.nama_level_error != '') {
+                            $('#nama_level_error').html(data.nama_level_error);
+                            $('#nama_level').removeClass('is-valid').addClass('is-invalid');
+
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    loadTableLevel('level/loadTable');
+    function loadTableLevel(url2) {
+        $.ajax({
+            type: "POST",
+            url: base_url + url2,
+            success: function (response) {
+                $('.list-data-level').html(response);
+                $('#dataTableHover').DataTable();
+            }
+        });
+    }
+
+    //show modal edit level
+    $(document).on('click', '#btnEditLevel', function (e) {
+        e.preventDefault();
+
+        let id = $(this).data('id');
+        $.ajax({
+            type: "POST",
+            url: base_url + 'level/showFormEdit/' + id
+        })
+            .done(function (data) {
+                $('#wadahModalEditLevel').html(data);
+                $('#modal-edit-level').modal('show');
+            });
+    });
+
+    //update data level
+    $(document).on('submit', '#formEditLevel', function (e) {
+        e.preventDefault();
+
+        //get value from form
+        let id = $('#id_level').val();
+        let nama_level_edit = $('#nama_level_edit').val();
+        let ket_edit = $('#ket_edit').val();
+
+        //do ajax
+        $.ajax({
+            url: base_url + 'level/update',
+            method: "POST",
+            data: { id: id, nama_level: nama_level_edit, ket: ket_edit },
+            success: function (data) {
+                var data = JSON.parse(data);
+                if (data.statusCode == 200) {
+                    loadTableLevel('level/loadTable');
+
+                    $('#modal-edit-level').modal('hide');
+                    tata.success('Success', 'Data Berhasil Dirubah!');
+
+                } else if (data.statusCode == 201) {
+                    //do something
+                } else {
+                    //if form validation is false
+                    if (data.error == true) {
+                        if (data.nama_level_error != '') {
+                            $('#nama_level_error').html(data.nama_level_error);
+                            $('#nama_level_edit').removeClass('is-valid').addClass('is-invalid');
+
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+    $(document).on('click', '#btnDeleteLevel', function (e) {
+        e.preventDefault();
+
+        let id = $(this).data('id');
+        Swal.fire({
+            title: 'Anda Yakin Ingin Menghapus Data ini?',
+            text: "Anda Tidak Dapat Mengembalikan Aksi ini.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ffa426',
+            cancelButtonColor: '#757575',
+            confirmButtonText: 'Ya, Saya Yakin',
+            cancelButtonText: 'Batal',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: base_url + 'level/destroy/' + id,
+                    method: "POST",
+                    success: function (data) {
+                        var data = JSON.parse(data);
+                        if (data.statusCode == 200) {
+                            loadTableLevel('level/loadTable');
+                            tata.success('Success', 'Data Berhasil Dihapus!');
+                        } else {
+                            tata.error('Error', 'Oops! Terjadi Kesalahan!');
+                        }
+                    }
+                });
+            }
+        })
+    });
 
 
     //form tambah pegawai
@@ -514,36 +698,42 @@ $(document).ready(function () {
                             $('#id_jabatan_error').html('');
                         }
 
+                        if (data_response.id_level_error != '') {
+                            $('#id_level_error').html(data_response.id_level_error);
+                        } else {
+                            $('#id_level_error').html('');
+                        }
+
                         window.location.href = '#page-top';
                     }
                 } else {
                     if (data_response.statusCode == 200) {
-                        //show message
-                        tata.success('Success', 'Data Berhasil Ditambahkan!', {
-                            onClick: null
-                        });
 
-                        generatePass();
+                        window.location.href = base_url + 'pegawai#success';
+                        //show message
+
+
+                        //generatePass();
 
                         //duration disabled
-                        $('#satuan_durasi_pegawai').prop("disabled", true);
-                        $('#durasi_kerja_pegawai').prop("disabled", true);
+                        // $('#satuan_durasi_pegawai').prop("disabled", true);
+                        // $('#durasi_kerja_pegawai').prop("disabled", true);
 
                         //remove preview image
-                        $('.img-pegawai').remove();
+                        // $('.img-pegawai').remove();
 
                         //remove value form hidden name of image
-                        $('#image_pegawai').val("");
-                        $('#upload_image').next('.custom-file-label').html("Choose file");
+                        // $('#image_pegawai').val("");
+                        // $('#upload_image').next('.custom-file-label').html("Choose file");
 
                         //reset form
-                        $('#formTambahPegawai')[0].reset();
+                        // $('#formTambahPegawai')[0].reset();
 
                         //page to top
-                        var $anchor = $('.btnSendDataPegawai');
-                        $('html, body').stop().animate({
-                            scrollTop: ($($anchor.attr('data-link')).offset().top)
-                        }, 1000, 'easeInOutExpo');
+                        // var $anchor = $('.btnSendDataPegawai');
+                        // $('html, body').stop().animate({
+                        //     scrollTop: ($($anchor.attr('data-link')).offset().top)
+                        // }, 1000, 'easeInOutExpo');
 
                     }
 
@@ -630,7 +820,7 @@ $(document).ready(function () {
             $('#durasi_kerja_pegawai').prop("disabled", true);
         }
 
-       
+
 
     });
 
@@ -713,6 +903,74 @@ $(document).ready(function () {
     });
 
 
+    //show list pegawai
+    pegawaiList();
 
+
+    //pagination pegawai
+    $(document).on('click', "#pagination li a", function (event) {
+        var page_url = $(this).attr('href');
+        pegawaiList(page_url);
+        event.preventDefault();
+
+
+     
+
+    });
+
+    $(document).on('keyup', '#searchPegawai', function(){
+        let search_key = $(this).val();
+        let search_temp = search_key.split(' ').join('%20');
+
+        console.log(search_temp);
+
+        var page_url = base_url + 'pegawai/search/' + search_temp;
+        if(search_temp == ''){
+            pegawaiList();
+        } else {
+            pegawaiList(page_url);
+        }
+    });
+
+    //load data pegawai
+    function pegawaiList(page_url = false) {
+
+        var base_url2 = base_url + 'pegawai/list_pegawai';
+        if (page_url == false) {
+            var page_url = base_url2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: page_url,
+            beforeSend: function () {
+                // $('#dataProduct').hide(1000);
+                // $('#load').show();
+            },
+            success: function (response) {
+
+                $("#list_pegawai").html(response);
+
+
+
+            }
+        });
+    }
+
+    //lihat detail pegawai
+    $(document).on('click', '#btnLihatPegawai', function(e){
+        e.preventDefault();
+
+        let nip = $(this).data("nip");
+        $.ajax({
+            type: "POST",
+            url: base_url + 'pegawai/detail/' + nip
+
+        })
+            .done(function (data) {
+                $('#wadahModalDetailPegawai').html(data);
+                $('#modal-detail-pegawai').modal('show');
+            });
+    });
 
 });

@@ -20,7 +20,7 @@
             <i class="fas fa-user-friends"></i>
             <span>Pegawai</span>
         </a>
-        <div id="collapseBootstrap" class="collapse <?= $nav_title == "pegawai" ? "show" : "" ?>"" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar">
+        <div id="collapseBootstrap" class="collapse <?= $nav_title == "pegawai" ? "show" : "" ?>"" aria-labelledby=" headingBootstrap" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Pegawai</h6>
                 <a class="collapse-item <?= $detail_title == "pegawai" ? "active" : "" ?>" href="<?= base_url("pegawai"); ?>">Data Pegawai</a>
@@ -55,6 +55,19 @@
             </div>
         </div>
     </li>
+    <li class="nav-item <?= $nav_title == "level" ? "active" : "" ?>">
+        <a class="nav-link collapsed " href="#" data-toggle="collapse" data-target="#collapseLevel" aria-expanded="true" aria-controls="collapseTable">
+            <i class="fas fa-layer-group"></i>
+            <span>Level</span>
+        </a>
+        <div id="collapseLevel" class="collapse <?= $nav_title == "level" ? "show" : "" ?>" aria-labelledby="headingTable" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Level</h6>
+                <a class="collapse-item <?= $detail_title == "level" ? "active" : "" ?>" href="<?= base_url("level"); ?>">Data Level</a>
+                <a class="collapse-item" id="btnTambahLevel" href="#">Tambah Level</a>
+            </div>
+        </div>
+    </li>
     <li class="nav-item">
         <a class="nav-link" href="ui-colors.html">
             <i class="fas fa-fw fa-palette"></i>
@@ -62,30 +75,6 @@
         </a>
     </li>
     <hr class="sidebar-divider">
-    <div class="sidebar-heading">
-        Examples
-    </div>
-    <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePage" aria-expanded="true" aria-controls="collapsePage">
-            <i class="fas fa-fw fa-columns"></i>
-            <span>Pages</span>
-        </a>
-        <div id="collapsePage" class="collapse" aria-labelledby="headingPage" data-parent="#accordionSidebar">
-            <div class="bg-white py-2 collapse-inner rounded">
-                <h6 class="collapse-header">Example Pages</h6>
-                <a class="collapse-item" href="login.html">Login</a>
-                <a class="collapse-item" href="register.html">Register</a>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
-            </div>
-        </div>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-chart-area"></i>
-            <span>Charts</span>
-        </a>
-    </li>
-    <hr class="sidebar-divider">
+  
     <div class="version" id="version-ruangadmin"></div>
 </ul>

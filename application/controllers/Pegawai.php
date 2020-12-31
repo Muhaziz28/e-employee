@@ -17,11 +17,49 @@ class Pegawai extends MY_Controller
         $this->view($data);
     }
 
+    public function list_pegawai($page = null)
+    {
+        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')->paginate($page)->get();
+        $data['total_rows']     = $this->pegawai->join('divisi')->join('jabatan')->count();
+        $data['pagination']     = $this->pegawai->makePagination(base_url('pegawai/list_pegawai'), 3, $data['total_rows']);
+
+        $this->load->view('pages/pegawai/list_pegawai', $data);
+    }
+
+    public function search($keyword, $page = null)
+    {
+        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')
+            ->like('pegawai.nama', urldecode($keyword))
+            ->orLike('pegawai.nip', urldecode($keyword))
+            ->orLike('divisi.nama_divisi', urldecode($keyword))
+            ->paginate($page)
+            ->get();
+
+        $data['total_rows']     = $this->pegawai->join('divisi')->join('jabatan')
+            ->like('pegawai.nama', urldecode($keyword))
+            ->orLike('pegawai.nip', urldecode($keyword))
+
+            ->count();
+
+        $data['pagination']     = $this->pegawai->makePagination(
+            base_url("pegawai/search/" . urldecode($keyword)),
+            4,
+            $data['total_rows']
+        );
+
+        $this->load->view('pages/pegawai/list_pegawai', $data);
+    }
+
     public function add()
     {
 
         $this->pegawai->table       = 'divisi';
         $data['divisi']             = $this->pegawai->get();
+
+        $this->pegawai->table       = 'level';
+        $data['level']              = $this->pegawai->get();
+
+
         $data['title']              = 'Form Tambah Pegawai';
         $data['sub_title']          = 'Isi form di bawah ini untuk menambahkan data pegawai.';
         $data['nav_title']          = 'pegawai';
@@ -58,6 +96,7 @@ class Pegawai extends MY_Controller
                 'tgl_masuk_error'       => form_error('tgl_masuk'),
                 'id_divisi_error'       => form_error('id_divisi'),
                 'id_jabatan_error'      => form_error('id_jabatan'),
+                'id_level_error'        => form_error('id_level')
 
             );
 
@@ -81,9 +120,10 @@ class Pegawai extends MY_Controller
                 'satuan_durasi'     => $satuan_durasi,
                 'id_divisi'         => $this->input->post('id_divisi', true),
                 'id_jabatan'        => $this->input->post('id_jabatan', true),
+                'id_level'          => $this->input->post('id_level', true),
                 'image'             => $this->input->post('image_pegawai', true),
                 'password'          => hashEncrypt($this->input->post('password_generator'), true),
-                'password_generator'=> $this->input->post('password_generator', true)
+                'password_generator' => $this->input->post('password_generator', true)
             );
 
             if ($this->pegawai->add($data) == true) {
@@ -146,7 +186,7 @@ class Pegawai extends MY_Controller
         }
     }
 
-   
+
     public function tes()
     {
         $date = new DateTime("2020-12-19");
@@ -157,10 +197,20 @@ class Pegawai extends MY_Controller
 
         echo $tanggal_rencana;
     }
-    
+
 
     public function detail($id)
     {
+        $data['title']      = 'Lihat Detail Pegawai';
+        $data['content']    = $this->pegawai->join('divisi')
+            ->join('jabatan')
+            ->join('level')
+            ->where('nip', $id)
+            ->first();
+
+        //print_r($data['content']);
+
+        $this->output->set_output(show_my_modal('pages/pegawai/modal/modal_detail_pegawai', 'modal-detail-pegawai', $data, 'lg'));
     }
 }
 
