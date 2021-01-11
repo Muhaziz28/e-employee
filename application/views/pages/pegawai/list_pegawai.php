@@ -5,7 +5,10 @@
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
                     <div class="col-lg-4">
-                        <img src="<?= isset($row->image) && $row->image != '' ? base_url("images/pegawai/$row->image") : "https://st4.depositphotos.com/9998432/22597/v/600/depositphotos_225976914-stock-illustration-person-gray-photo-placeholder-man.jpg" ?>" class="card-img rounded-circle p-2" alt="...">
+                        <div class="text-center">
+
+                            <img src="<?= isset($row->image) && $row->image != '' ? base_url("images/pegawai/$row->image") : "https://st4.depositphotos.com/9998432/22597/v/600/depositphotos_225976914-stock-illustration-person-gray-photo-placeholder-man.jpg" ?>" class="card-img rounded-circle p-2 img-pegawai" alt="...">
+                        </div>
                     </div>
                     <div class="col-lg-8">
                         <div class="card-body">
@@ -14,8 +17,8 @@
                             <p><i class="fas fa-briefcase"></i>&nbsp;<?= $row->nama_divisi; ?></p>
                             <p class="card-text mt-3"><?= $row->alamat; ?></p>
 
-                            <a href="#" class="btn btn-primary">Edit</a>
-                            <a href="#" class="btn btn-danger">Hapus</a>
+                            <a href="<?= base_url("pegawai/edit/$row->nip"); ?>" class="btn btn-primary">Edit</a>
+                            <a href="#" class="btn btn-danger" id="btnDeletePegawai" data-nip="<?= $row->nip; ?>">Hapus</a>
                             <a href="#" class="btn btn-info" id="btnLihatPegawai" data-nip="<?= $row->nip; ?>">Lihat</a>
 
 

@@ -5,6 +5,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Divisi extends MY_Controller
 {
+    public function __construct()
+    {
+        parent::__construct();
+        $role = $this->session->userdata('role');
+
+        if ($role != 'hrd') {
+            redirect(base_url());
+            return;
+        }
+    }
 
     public function index()
     {

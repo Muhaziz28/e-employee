@@ -1,4 +1,4 @@
-<link href="<?= base_url("assets/") ?>img/logo/logo.png" rel="icon">
+<link href="<?= base_url("assets/") ?>img/logo/favicon.png" rel="icon">
 <link href="<?= base_url("assets/") ?>vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
 <link href="<?= base_url("assets/") ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
 
@@ -73,5 +73,37 @@
 
     .select2 {
         width: 100% !important;
+    }
+
+    .frame-pegawai {
+        border: 1px solid rgba(58, 59, 69, .2);
+        border-radius: 15px;
+    }
+
+
+    .topbar .dropdown-list .dropdown-header {
+        background-color: #565656;;
+        border: 1px solid #565656;;
+        padding-top: .75rem;
+        padding-bottom: .75rem;
+        color: #fff;
+    }
+
+    @media (max-width: 991px) {
+        .img-pegawai {
+            width: 200px;
+        }
+
+        .table-data-pegawai {
+            margin-top: 20px;
+        }
+
+        .frame-pegawai {
+            margin-left: 0px !important;
+        }
+
+        .btn-filter button{
+            width: 20% !important;
+        }
     }
 </style>

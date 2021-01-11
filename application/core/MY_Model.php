@@ -38,6 +38,20 @@ class MY_Model extends CI_Model
         return $this->form_validation->run();
     }
 
+    public function validate2()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_error_delimiters(
+            '<small class="form-text text-danger">',
+            '</small>'
+        );
+        $validationRules = $this->getValidationRules2();
+        $this->form_validation->set_rules($validationRules);
+        
+
+        return $this->form_validation->run();
+    }
+
     public function select($columns)
     {
         $this->db->select($columns);
@@ -84,6 +98,12 @@ class MY_Model extends CI_Model
     public function join($table, $type = 'left')
     {
         $this->db->join($table, "$this->table.id_$table = $table.id", $type);
+        return $this;
+    }
+
+    public function joinPegawai($table, $type = 'left')
+    {
+        $this->db->join($table, "$this->table.nip_$table = $table.nip", $type);
         return $this;
     }
     public function xjoin($table, $type = 'left')

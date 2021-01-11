@@ -25,3 +25,27 @@
 <div id="wadahModalDetailPegawai">
 
 </div>
+
+<div id="wadahModalAjukanCuti">
+
+</div>
+
+<div id="wadahModalDetailCuti">
+
+</div>
+
+<div id="wadahModalTambahLokasi">
+
+</div>
+
+<div id="wadahModalEditLokasi">
+
+</div>
+
+<div id="wadahModalRiwayatCuti">
+
+</div>
+
+<div id="wadahModalEditProfile">
+
+</div>

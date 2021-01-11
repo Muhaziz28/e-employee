@@ -6,6 +6,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Pegawai extends MY_Controller
 {
 
+    public function __construct()
+    {
+        parent::__construct();
+        $role = $this->session->userdata('role');
+
+        if ($role != 'hrd') {
+            redirect(base_url());
+            return;
+        }
+    }
+
+
     public function index()
     {
         $data['content']        = $this->pegawai->join('divisi')->join('jabatan')->get();
@@ -59,6 +71,8 @@ class Pegawai extends MY_Controller
         $this->pegawai->table       = 'level';
         $data['level']              = $this->pegawai->get();
 
+        $this->pegawai->table       = 'lokasi';
+        $data['lokasi']             = $this->pegawai->get();
 
         $data['title']              = 'Form Tambah Pegawai';
         $data['sub_title']          = 'Isi form di bawah ini untuk menambahkan data pegawai.';
@@ -69,6 +83,39 @@ class Pegawai extends MY_Controller
         $data['form_action']        = base_url('pegawai/insert');
         $data['page']               = 'pages/pegawai/form';
         $this->view($data);
+    }
+
+    public function edit($nip)
+    {
+        $data['input']              = $this->pegawai->join('divisi')
+            ->join('jabatan')
+            ->join('level')
+            ->where('pegawai.nip', $nip)
+            ->first();
+
+        $this->pegawai->table       = 'divisi';
+        $data['divisi']             = $this->pegawai->get();
+
+        $this->pegawai->table       = 'jabatan';
+        $data['jabatan']            = $this->pegawai->get();
+
+        $this->pegawai->table       = 'level';
+        $data['level']              = $this->pegawai->get();
+
+        $this->pegawai->table       = 'lokasi';
+        $data['lokasi']             = $this->pegawai->get();
+
+
+        $data['title']              = 'Form Edit Pegawai';
+        $data['sub_title']          = 'Isi form di bawah ini untuk mengedit data pegawai.';
+        $data['nav_title']          = 'pegawai';
+        $data['detail_title']       = '';
+
+
+        $data['form_action']        = base_url('pegawai/update');
+        $data['page']               = 'pages/pegawai/form_edit';
+        $this->view($data);
+        //print_r($data['input']);
     }
 
     public function insert()
@@ -96,7 +143,8 @@ class Pegawai extends MY_Controller
                 'tgl_masuk_error'       => form_error('tgl_masuk'),
                 'id_divisi_error'       => form_error('id_divisi'),
                 'id_jabatan_error'      => form_error('id_jabatan'),
-                'id_level_error'        => form_error('id_level')
+                'id_level_error'        => form_error('id_level'),
+                'id_lokasi_error'       => form_error('id_lokasi')
 
             );
 
@@ -121,6 +169,7 @@ class Pegawai extends MY_Controller
                 'id_divisi'         => $this->input->post('id_divisi', true),
                 'id_jabatan'        => $this->input->post('id_jabatan', true),
                 'id_level'          => $this->input->post('id_level', true),
+                'id_lokasi'         => $this->input->post('id_lokasi', true),
                 'image'             => $this->input->post('image_pegawai', true),
                 'password'          => hashEncrypt($this->input->post('password_generator'), true),
                 'password_generator' => $this->input->post('password_generator', true)
@@ -135,6 +184,99 @@ class Pegawai extends MY_Controller
                     'statusCode'    => 201
                 ));
             }
+        }
+    }
+
+    public function update()
+    {
+        $nip           = $this->input->post('nip', true);
+        $image         = $this->input->post('image_pegawai', true);
+        $imageTemp     = $this->input->post('image_pegawai_temp', true);
+        $durasi_kerja  = $this->input->post('durasi_kerja', true);
+        $satuan_durasi = $this->input->post('satuan_durasi', true);
+
+
+        if (!$this->pegawai->validate()) {
+            $array = array(
+                'error'                 => true,
+                'statusCode'            => 400,
+                'nama_error'            => form_error('nama'),
+                'email_error'           => form_error('email'),
+                'tempat_lahir_error'    => form_error('tempat_lahir'),
+                'tgl_lahir_error'       => form_error('tgl_lahir'),
+                'nohp_error'            => form_error('nohp'),
+                'jenis_kelamin_error'   => form_error('jenis_kelamin'),
+                'agama_error'           => form_error('agama'),
+                'status_error'          => form_error('status'),
+                'pendidikan_error'      => form_error('pendidikan'),
+                'status_pegawai_error'  => form_error('status_pegawai'),
+                'alamat_error'          => form_error('alamat'),
+                'tgl_masuk_error'       => form_error('tgl_masuk'),
+                'id_divisi_error'       => form_error('id_divisi'),
+                'id_jabatan_error'      => form_error('id_jabatan'),
+                'id_level_error'        => form_error('id_level'),
+                'id_lokasi_error'       => form_error('id_lokasi')
+
+            );
+
+            echo json_encode($array);
+        } else {
+            $data = array(
+                'nip'               => $nip,
+                'nama'              => $this->input->post('nama', true),
+                'email'             => $this->input->post('email', true),
+                'tempat_lahir'      => $this->input->post('tempat_lahir', true),
+                'tgl_lahir'         => $this->input->post('tgl_lahir', true),
+                'nohp'              => $this->input->post('nohp', true),
+                'jenis_kelamin'     => $this->input->post('jenis_kelamin', true),
+                'agama'             => $this->input->post('agama', true),
+                'status'            => $this->input->post('status', true),
+                'pendidikan'        => $this->input->post('pendidikan', true),
+                'status_pegawai'    => $this->input->post('status_pegawai', true),
+                'alamat'            => $this->input->post('alamat', true),
+                'tgl_masuk'         => $this->input->post('tgl_masuk', true),
+                'durasi_kerja'      => $durasi_kerja,
+                'satuan_durasi'     => $satuan_durasi,
+                'id_divisi'         => $this->input->post('id_divisi', true),
+                'id_jabatan'        => $this->input->post('id_jabatan', true),
+                'id_level'          => $this->input->post('id_level', true),
+                'id_lokasi'         => $this->input->post('id_lokasi', true),
+                'image'             => $image
+
+            );
+
+            if ($this->pegawai->where('nip', $nip)->update($data)) {
+
+                if ($imageTemp != $image) {
+                    $this->pegawai->deleteImage($imageTemp);
+                }
+
+                echo json_encode(array(
+                    'statusCode'    => 200
+                ));
+            } else {
+                echo json_encode(array(
+                    'statusCode'    => 201
+                ));
+            }
+        }
+    }
+
+    public function destroy($nip)
+    {
+        if ($this->input->is_ajax_request()) {
+            if ($this->pegawai->where('nip', $nip)->delete()) {
+                echo json_encode(array(
+                    "statusCode" => 200,
+
+                ));
+            } else {
+                echo json_encode(array(
+                    "statusCode" => 201,
+                ));
+            }
+        } else {
+            echo '<h3>Tidak Memiliki Akses</h3>';
         }
     }
 
@@ -187,25 +329,55 @@ class Pegawai extends MY_Controller
     }
 
 
+
+
     public function tes()
     {
-        $date = new DateTime("2020-12-19");
-        $durasi = 2;
-        $jenis = 'year';
-        $date->modify("+$durasi $jenis");
-        $tanggal_rencana = $date->format('Y-m-d');
+        // $date = new DateTime("2020-12-19");
+        // $durasi = 2;
+        // $jenis = 'year';
+        // $date->modify("+$durasi $jenis");
+        // $tanggal_rencana = $date->format('Y-m-d');
 
-        echo $tanggal_rencana;
+        // echo $tanggal_rencana;
+
+        // $curl = curl_init();
+
+        // curl_setopt_array($curl, array(
+        //     CURLOPT_URL => "https://pro.rajaongkir.com/api/province",
+        //     CURLOPT_RETURNTRANSFER => true,
+        //     CURLOPT_ENCODING => "",
+        //     CURLOPT_MAXREDIRS => 10,
+        //     CURLOPT_TIMEOUT => 30,
+        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        //     CURLOPT_CUSTOMREQUEST => "GET",
+        //     CURLOPT_HTTPHEADER => array(
+        //         "key: 62227ebac97ed6c2faf55075c50db28c"
+        //     ),
+        // ));
+
+        // $response = curl_exec($curl);
+        // $err = curl_error($curl);
+
+        // curl_close($curl);
+
+        // if ($err) {
+        //     $error = "cURL Error #:" . $err;
+        //     echo $error;
+        // } else {
+        //     print_r($response);
+        // }
+        //return false;
     }
 
 
-    public function detail($id)
+    public function detail($nip)
     {
         $data['title']      = 'Lihat Detail Pegawai';
         $data['content']    = $this->pegawai->join('divisi')
             ->join('jabatan')
             ->join('level')
-            ->where('nip', $id)
+            ->where('nip', $nip)
             ->first();
 
         //print_r($data['content']);

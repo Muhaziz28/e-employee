@@ -101,6 +101,12 @@ class Pegawai_model extends MY_Model
                 'rules' => 'required'
             ],
 
+            [
+                'field' => 'id_lokasi',
+                'label' => 'Penempatan',
+                'rules' => 'required'
+            ],
+
 
 
         ];
@@ -124,7 +130,7 @@ class Pegawai_model extends MY_Model
 
         $this->load->library('upload', $config);
 
-        if($this->upload->do_upload($fieldName)) {
+        if ($this->upload->do_upload($fieldName)) {
             return $this->upload->data();
         } else {
             $this->session->set_flashdata('image_error', $this->upload->display_errors('', ''));
@@ -134,7 +140,7 @@ class Pegawai_model extends MY_Model
 
     public function deleteImage($fileName)
     {
-        if(file_exists("./images/pegawai/$fileName")) {
+        if (file_exists("./images/pegawai/$fileName")) {
             unlink("./images/pegawai/$fileName");
         }
     }

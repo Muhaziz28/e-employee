@@ -20,6 +20,16 @@
 <script src="<?= base_url("assets/") ?>js/tata/tata.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.js" integrity="sha512-vUJTqeDCu0MKkOhuI83/MEX5HSNPW+Lw46BA775bAWIp1Zwgz3qggia/t2EnSGB9GoS2Ln6npDmbJTdNhHy1Yw==" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.7.5/lottie.min.js"></script>
 
 <!-- Page level custom scripts -->
 <script src="<?= base_url("assets/") ?>js/myapp.js"></script>
+<script>
+    var animation = bodymovin.loadAnimation({
+        container: document.getElementById('anim'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: './assets/anim/grape/Animation05/drawkit-grape-animation-5-LOOP.json'
+    });
+</script>

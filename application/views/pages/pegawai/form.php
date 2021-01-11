@@ -284,6 +284,27 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="simpleDataInput">Penempatan</label>
+                                <div class="lokasi">
+                                    <select class="form-control" id="id_lokasi_pegawai" name="id_lokasi">
+                                        <option value="">- Pilih Penempatan -</option>
+                                        <?php foreach ($lokasi as $row) : ?>
+                                            <option value="<?= $row->id; ?>"><?= $row->nama_lokasi; ?></option>
+                                        <?php endforeach ?>
+
+                                    </select>
+                                    <span id="id_lokasi_error"></span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
 
                     <div class="form-group">
                         <label for="simpleDataInput">Foto Pegawai</label>
@@ -344,13 +365,14 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button class="btn btn-success crop_image" id="crop_image">Crop & Upload Image</button>
+                    <button class="btn btn-warning crop_image" id="crop_image">Crop & Upload Image</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- <div class="modal fade" id="uploadimageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
+<!-- <div class="modal fade" id="uploadimageModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelLogout" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
