@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends MY_Controller {
+class Home extends MY_Controller {
 
 	
 	public function __construct()
@@ -20,10 +20,10 @@ class Dashboard extends MY_Controller {
 	
 	public function index()
 	{
-		$data['title']          = 'Dashboard';
-        $data['nav_title']      = 'dashboard';
-        $data['detail_title']   = 'dashboard';
-		$data['page'] 			= 'pages/dashboard/index';
+		$data['title']          = 'Home';
+        $data['nav_title']      = 'home';
+        $data['detail_title']   = 'home';
+		$data['page'] 			= 'pages/home/index';
 
 		$this->view($data);
 	}

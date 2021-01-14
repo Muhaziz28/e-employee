@@ -7,8 +7,8 @@
         <div class="sidebar-brand-text mx-3" style="font-size: 13px;">E-Employee</div>
     </a>
     <hr class="sidebar-divider my-0">
-    <li class="nav-item <?= $nav_title == "dashboard" ? "active" : "" ?>">
-        <a class="nav-link" href="<?= base_url("dashboard"); ?>">
+    <li class="nav-item <?= $nav_title == "home" ? "active" : "" ?>">
+        <a class="nav-link" href="<?= base_url("home"); ?>">
             <i class="fas fa-home"></i>
             <span>Home</span></a>
     </li>

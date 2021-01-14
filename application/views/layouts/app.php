@@ -13,7 +13,7 @@
     <!--style-->
 </head>
 
-<body id="page-top">
+<body id="page-top" data-role="<?= $this->session->userdata('role'); ?>">
     <div id="wrapper">
         <!-- Sidebar -->
         <?php $this->load->view('layouts/_sidebar'); ?>

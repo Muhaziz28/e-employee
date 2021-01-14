@@ -39,6 +39,7 @@ class Cuti extends MY_Controller
 
     public function insert()
     {
+        $nama_pegawai       = $this->input->post('nama_pegawai', true);
         $nip_pegawai        = $this->input->post('nip_pegawai', true);
         $jenis_cuti         = $this->input->post('jenis_cuti', true);
         $lama_cuti          = $this->input->post('lama_cuti', true);
@@ -90,6 +91,24 @@ class Cuti extends MY_Controller
                 // $this->cuti->table = 'pegawai';
                 // $this->cuti->where('nip', $this->session->userdata('nip'))->update(['jatah_cuti' => $jatah_cuti - $lama_cuti]);
 
+                //notification with pusher to admin
+                require APPPATH . 'views/vendor/autoload.php';
+
+                $options = array(
+                    'cluster' => 'ap1',
+                    'useTLS' => true
+                );
+                $pusher = new Pusher\Pusher(
+                    '1533388f429c74588023',
+                    '3cef4f78903478fe4b8c',
+                    '1135943',
+                    $options
+                );
+
+                $data['message'] = 'hello world';
+                $data['nama']    = $nama_pegawai;
+                $pusher->trigger('my-channel', 'my-event', $data);
+
                 if ($this->sendMail($this->session->userdata('name'), $this->session->userdata('email'), 'hrd@sorayabedsheet.id', $data_pegawai, $data)) {
                     echo json_encode(array(
                         "statusCode" => 200,
@@ -102,6 +121,45 @@ class Cuti extends MY_Controller
                 ));
             }
         }
+    }
+
+    public function checkCutiPerDay($nip)
+    {
+        $check = $this->cuti->where('nip_pegawai', $nip)
+            ->where('YEAR(created_at)', date("Y"))
+            ->where('MONTH(created_at)', date("m"))
+            ->where('DAY(created_at)', date("d"))
+            ->where('status_cuti', 'pending')
+            ->count();
+
+        if ($check > 0) {
+
+            $array = array(
+                'statusCode' => 200,
+                'message'    => 'Pengajuan Cuti hanya dapat diajukan 1x sehari',
+            );
+        } else {
+            $array = array(
+                'statusCode' => 400,
+                'message'    => '',
+            );
+        }
+        echo json_encode($array);
+    }
+
+    public function max_cuti()
+    {
+        $lama_cuti          = $this->input->post('lama_cuti', true);
+        $jenis_cuti         = $this->input->post('jenis_cuti', true);
+
+        if ($jenis_cuti == "Cuti Tahunan") {
+            if ($lama_cuti > 12) {
+                $this->load->library('form_validation');
+                $this->form_validation->set_message('max_cuti', '%s harus kurang dari 12');
+                return false;
+            }
+        }
+        return true;
     }
 
     public function sendMail($nama, $fromEmail, $toEmail, $data_arr)
@@ -168,23 +226,26 @@ class Cuti extends MY_Controller
         $this->output->set_output(show_my_modal('pages/cuti/modal/modal_detail_cuti', 'modal-detail-cuti', $data, 'lg'));
     }
 
-    public function update_status_cuti($id, $status, $nama, $toEmail, $lamaCuti = null, $jatahCuti = null, $nip = null)
+    public function update_status_cuti($id, $status, $nama, $toEmail, $jenisCuti = null, $lamaCuti = null, $jatahCuti = null, $nip = null)
     {
         if ($this->input->is_ajax_request()) {
             if ($status == "diterima") {
                 if ($this->cuti->where('id', $id)->update(['status_cuti' => 'diterima'])) {
 
                     //kurangi jatah cuti pegawai
-                    $this->cuti->table = 'pegawai';
-                    $this->cuti->where('nip', $nip)->update(['jatah_cuti' => $jatahCuti - $lamaCuti]);
+                    $conv_jenis_cuti = urldecode($jenisCuti);
+                    if ($conv_jenis_cuti == "Cuti Tahunan") {
+                        $this->cuti->table = 'pegawai';
+                        $this->cuti->where('nip', $nip)->update(['jatah_cuti' => $jatahCuti - $lamaCuti]);
 
-                    //set ulang session data jatah cuti
+                        //set ulang session data jatah cuti
+                        $array = array(
+                            'jatah_cuti' => $jatahCuti - $lamaCuti
+                        );
 
-                    $array = array(
-                        'jatah_cuti' => $jatahCuti - $lamaCuti
-                    );
+                        $this->session->set_userdata($array);
+                    }
 
-                    $this->session->set_userdata($array);
 
 
                     $this->sendMailToPegawai(urldecode($nama), 'hrd@sorayabedsheet.id', $toEmail, $status);

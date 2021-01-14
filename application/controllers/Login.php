@@ -13,7 +13,7 @@ class Login extends MY_Controller
         //$role = $this->session->userdata('role');
 
         if ($is_login) {
-            redirect(base_url("dashboard"));
+            redirect(base_url("home"));
             return;
             // if ($role == 'admin') {
             //     redirect(base_url("home"));
@@ -61,7 +61,7 @@ class Login extends MY_Controller
             if ($this->session->userdata('role') == 'hrd') {
                 redirect(base_url('pegawai'));
             } else {
-                redirect(base_url('dashboard'));
+                redirect(base_url('home'));
             }
             //redirect(base_url("dashboard"));
         } else { //jika proses login gagal maka direct ke halaman login lagi

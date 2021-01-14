@@ -72,6 +72,7 @@ $(document).ready(function () {
         }
     }
 
+
     //show modal add divisi
     $(document).on('click', '#btnTambahDivisi', function (e) {
         e.preventDefault();
@@ -1175,13 +1176,37 @@ $(document).ready(function () {
     //show modal ajukan cuti
     $(document).on('click', '#btnAjukanCuti', function (e) {
         e.preventDefault();
+
+
+        let nip = $(this).data("nip");
+        $.ajax({
+            type: "POST",
+            url: base_url + 'cuti/checkCutiPerDay/' + nip
+        })
+            .done(function (data) {
+                var data = JSON.parse(data);
+
+                if (data.statusCode != 200) {
+                    showModalAddCuti();
+                } else {
+                    tata.warn('Warning', data.message);
+                }
+            });
+
+
+
+
+
+    });
+
+    function showModalAddCuti() {
         $.ajax({
             type: "POST",
             url: base_url + 'cuti/showFormCuti'
 
         })
-            .done(function (data) {
-                $('#wadahModalAjukanCuti').html(data);
+            .done(function (response) {
+                $('#wadahModalAjukanCuti').html(response);
                 $('#modal-add-cuti').modal('show');
 
                 $('#tgl_cuti').datepicker({
@@ -1196,9 +1221,7 @@ $(document).ready(function () {
                     allowClear: true
                 });
             });
-
-
-    });
+    }
 
     $(document).on('submit', '#formAjukanCuti', function (e) {
         e.preventDefault();
@@ -1363,6 +1386,8 @@ $(document).ready(function () {
         let lama_cuti = $(this).data("lamacuti");
         let jatah_cuti = $(this).data("jatahcuti");
         let nip = $(this).data("nip");
+        let jenis_cuti = $(this).data("jeniscuti");
+        let jenis_cuti_temp = jenis_cuti.split(' ').join('%20');
         let nama_temp = nama.split(' ').join('%20');
 
         console.log(nama_temp);
@@ -1386,7 +1411,7 @@ $(document).ready(function () {
         }).then((result) => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: base_url + 'cuti/update_status_cuti/' + id + '/' + status + '/' + nama_temp + '/' + email + '/' + lama_cuti + '/' + jatah_cuti + '/' + nip,
+                    url: base_url + 'cuti/update_status_cuti/' + id + '/' + status + '/' + nama_temp + '/' + email + '/' + jenis_cuti_temp + '/' + lama_cuti + '/' + jatah_cuti + '/' + nip,
                     method: "POST",
                     beforeSend: function () {
                         Swal.fire({
@@ -1914,5 +1939,9 @@ $(document).ready(function () {
         });
 
     });
+
+
+
+
 
 });

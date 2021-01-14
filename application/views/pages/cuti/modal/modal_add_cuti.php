@@ -30,6 +30,7 @@ $satuan_durasi    = $this->session->userdata('satuan_durasi');
     <div class="modal-body">
         <?php $this->load->view('layouts/_alert'); ?>
         <input type="hidden" name="nip_pegawai" id="nip_pegawai" value="<?= $nip; ?>">
+        <input type="hidden" name="nama_pegawai" id="nama_pegawai" value="<?= $nama; ?>">
         <h6 class="m-0 font-weight-bold text-warning mb-4">Identitas Diri</h6>
         <div class="table-responsive">
             <table class="table">
@@ -66,7 +67,7 @@ $satuan_durasi    = $this->session->userdata('satuan_durasi');
                 <?php
                 $jatah_cuti = $this->session->userdata('jatah_cuti');
 
-                if ($jatah_cuti == 0) : ?>
+                if ($jatah_cuti <= 0) : ?>
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="jenis_cuti" id="inlineRadio1" value="Cuti Tahunan" disabled>
                         <label class="form-check-label" for="inlineRadio1">Cuti Tahunan</label>

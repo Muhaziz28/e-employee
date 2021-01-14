@@ -118,7 +118,7 @@
             <div class="col-lg-12">
                 <div class="text-center">
                     <p>Pegawai ini ingin mengajukan cuti dengan keterangan di atas. Lakukan tindak lanjut atas pengajuan cuti ini.</p>
-                    <a href="#" class="btn btn-info btn-lg btn-block" id="btnTerimaCuti" data-status="diterima" data-id="<?= $content->id; ?>" data-nama="<?= $content->nama; ?>" data-email="<?= $content->email; ?>" data-lamacuti="<?= $content->lama_cuti; ?>" data-jatahcuti="<?= $content->jatah_cuti; ?>" data-nip="<?= $content->nip; ?>">Terima</a>
+                    <a href="#" class="btn btn-info btn-lg btn-block" id="btnTerimaCuti" data-status="diterima" data-id="<?= $content->id; ?>" data-nama="<?= $content->nama; ?>" data-email="<?= $content->email; ?>" data-lamacuti="<?= $content->lama_cuti; ?>" data-jatahcuti="<?= $content->jatah_cuti; ?>" data-nip="<?= $content->nip; ?>" data-jeniscuti="<?= $content->jenis_cuti; ?>">Terima</a>
                     <a href="#" class="btn btn-danger btn-lg btn-block" id="btnTolakCuti" data-status="ditolak" data-id="<?= $content->id; ?>" data-nama="<?= $content->nama; ?>" data-email="<?= $content->email; ?>">Tolak</a>
 
                 </div>

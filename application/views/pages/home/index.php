@@ -47,7 +47,7 @@ $panggilan = explode(" ", $nama);
 						<div class="col-lg-5 my-auto">
 							<h3 class="text-grey-700">Ingin Mengajukan Cuti?</h3>
 							<p>Ajukan cutimu kepada HRD dengan mudah dengan menekan tombol di bawah ini, dan tunggu HRD meng-<i>konfirmasi</i> ajuan cutimu.</p>
-							<a href="#" class="btn btn-warning" id="btnAjukanCuti" data-jatahcuti="<?= $this->session->userdata('jatah_cuti'); ?>">AJUKAN CUTIMU</a>
+							<a href="#" class="btn btn-warning" id="btnAjukanCuti" data-jatahcuti="<?= $this->session->userdata('jatah_cuti'); ?>" data-nip="<?= $this->session->userdata('nip'); ?>">AJUKAN CUTIMU</a>
 
 						</div>
 					</div>

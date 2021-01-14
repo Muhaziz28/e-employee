@@ -19,7 +19,7 @@ class Cuti_model extends MY_Model
             [
                 'field' => 'lama_cuti',
                 'label' => 'Lama Cuti',
-                'rules' => 'required|trim'
+                'rules' => 'required|trim|callback_max_cuti'
             ],
 
             [
