@@ -13,27 +13,16 @@
                     <div class="col-lg-8">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h5 class="card-title" style="margin-bottom: -20px;"><strong><?= $row->nama; ?></strong></h5>
-                            <div class="dropdown no-arrow">
-                                <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                    
-                                    <a class="dropdown-item text-danger" href="#" id="btnOutPegawai" data-nip="<?= $row->nip; ?>"><strong>Keluarkan</strong></a>
-                                    
-                                   
-                                </div>
-                            </div>
+                            
                         </div>
                         <div class="card-body">
 
                             <small>NIP: <?= $row->nip; ?></small>
                             <p><i class="fas fa-briefcase"></i>&nbsp;<?= $row->nama_divisi; ?></p>
                             <p class="card-text mt-3"><?= $row->alamat; ?></p>
+                            <p>Tgl Dikeluarkan : <?= date_format(new DateTime($row->tgl_keluar), "d M Y"); ?></p>
 
-                            <a href="<?= base_url("pegawai/edit/$row->nip"); ?>" class="btn btn-primary">Edit</a>
-                            <a href="#" class="btn btn-danger" id="btnDeletePegawai" data-nip="<?= $row->nip; ?>">Hapus</a>
-                            <a href="#" class="btn btn-info" id="btnLihatPegawai" data-nip="<?= $row->nip; ?>">Lihat</a>
+                            <a href="#" class="btn btn-info" id="btnMasukkanPegawai" data-nip="<?= $row->nip; ?>">Masukkan</a>
 
 
 
@@ -52,7 +41,7 @@
 
 <div class="row mt-4 mb-3">
     <div class="col-lg-12">
-        <div id="pagination">
+        <div id="pagination_out">
             <nav aria-label="...">
                 <!-- <ul class="pagination" class="justify-content-center">
                     <li class="page-item disabled">

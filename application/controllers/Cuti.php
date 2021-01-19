@@ -33,7 +33,7 @@ class Cuti extends MY_Controller
         $data['title']     = 'Form Ajukan Cuti';
 
         $this->cuti->table = 'pegawai';
-        $data['pegawai']   = $this->cuti->get();
+        $data['pegawai']   = $this->cuti->where('is_out', 1)->get();
         $this->output->set_output(show_my_modal('pages/cuti/modal/modal_add_cuti', 'modal-add-cuti', $data, 'lg'));
     }
 
@@ -315,7 +315,7 @@ class Cuti extends MY_Controller
         $data['detail_title']   = 'potong_cuti';
 
         $this->cuti->table      = 'pegawai';
-        $data['getPegawai']     = $this->cuti->get();
+        $data['getPegawai']     = $this->cuti->where('is_out', 1)->get();
         $data['page']           = 'pages/cuti/potong/index';
 
         $this->view($data);
@@ -325,7 +325,7 @@ class Cuti extends MY_Controller
     {
 
         $this->cuti->table      = 'pegawai';
-        $data['getPegawai']     = $this->cuti->get();
+        $data['getPegawai']     = $this->cuti->where('is_out', 1)->get();
         echo $this->load->view('pages/cuti/potong/form_potong_cuti', $data, true);
     }
 

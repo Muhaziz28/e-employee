@@ -14,7 +14,7 @@
                 <img src="<?= isset($content->image) && $content->image != '' ? base_url("images/pegawai/$content->image") : "https://st4.depositphotos.com/9998432/22597/v/600/depositphotos_225976914-stock-illustration-person-gray-photo-placeholder-man.jpg" ?>" class="card-img rounded-circle p-2 img-pegawai" alt="pegawai-image">
                 <h3 class="h3 mt-3 font-weight-bold"><?= $content->nama; ?></h3>
                 <p style="margin-top: -10px;"><?= $content->email; ?></p>
-                <a href="#" class="btn btn-warning">Lihat Riwayat Cuti</a>
+                <a href="#" class="btn btn-warning" id="btnRiwayatCuti" data-nip="<?= $content->nip; ?>">Lihat Riwayat Cuti</a>
             </div>
 
         </div>

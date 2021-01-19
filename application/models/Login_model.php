@@ -39,6 +39,7 @@ class Login_model extends MY_Model
             ->join('jabatan')
             ->join('level')
             ->where('email', strtolower($input->email))
+            ->where('is_out', 1)
             ->first();
 
         if (!$query) {

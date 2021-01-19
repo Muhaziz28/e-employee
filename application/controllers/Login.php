@@ -59,7 +59,7 @@ class Login extends MY_Controller
         if ($this->login->run($input)) {
             $this->session->set_flashdata('success', 'Berhasil melakukan login');
             if ($this->session->userdata('role') == 'hrd') {
-                redirect(base_url('pegawai'));
+                redirect(base_url('dashboard'));
             } else {
                 redirect(base_url('home'));
             }

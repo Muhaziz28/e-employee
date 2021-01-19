@@ -12,11 +12,18 @@
             <i class="fas fa-home"></i>
             <span>Home</span></a>
     </li>
-    <hr class="sidebar-divider">
-
+    <?php if ($role == 'hrd') : ?>
+        <li class="nav-item <?= $nav_title == "dashboard" ? "active" : "" ?>">
+            <a class="nav-link" href="<?= base_url("dashboard"); ?>">
+            <i class="far fa-chart-bar"></i>
+                <span>Dashboard</span></a>
+        </li>
+        <hr class="sidebar-divider">
+    <?php endif ?>
 
 
     <?php if ($role == 'hrd') : ?>
+
         <div class="sidebar-heading">
             Main
         </div>
@@ -30,6 +37,7 @@
                     <h6 class="collapse-header">Pegawai</h6>
                     <a class="collapse-item <?= $detail_title == "pegawai" ? "active" : "" ?>" href="<?= base_url("pegawai"); ?>">Data Pegawai</a>
                     <a class="collapse-item <?= $detail_title == "tambah_pegawai" ? "active" : "" ?>" href="<?= base_url("pegawai/add"); ?>">Tambah Pegawai</a>
+                    <a class="collapse-item <?= $detail_title == "pegawai_out" ? "active" : "" ?>" href="<?= base_url("pegawai/out"); ?>">Data Pegawai Out</a>
 
                 </div>
             </div>

@@ -260,6 +260,8 @@ class MY_Model extends CI_Model
         $this->pagination->initialize($config);
         return $this->pagination->create_links();
     }
+
+    
 }
 
 /* End of file MY_Model.php */

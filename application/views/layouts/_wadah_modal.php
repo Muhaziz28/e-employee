@@ -49,3 +49,7 @@
 <div id="wadahModalEditProfile">
 
 </div>
+
+<div id="wadahModalPegawaiOut">
+
+</div>

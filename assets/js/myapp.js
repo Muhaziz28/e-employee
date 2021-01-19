@@ -1941,6 +1941,152 @@ $(document).ready(function () {
     });
 
 
+    //pegawai out
+    //show modal pegawai out
+    $(document).on('click', '#btnOutPegawai', function (e) {
+        e.preventDefault();
+
+        let nip = $(this).data("nip");
+        $.ajax({
+            type: "POST",
+            url: base_url + 'pegawai/showModalToPegawaiOut/' + nip,
+            success: function (response) {
+                $('#wadahModalPegawaiOut').html(response);
+                $('#modal-to-pegawai-out').modal('show');
+                $('.keterangan').hide();
+            }
+        });
+    });
+
+    $(document).on('change', '#status_out', function () {
+        let val = $('#status_out option:selected').val();
+
+        if (val == "Lainnya") {
+            $('.keterangan').show(500);
+            $('#keterangan').val("");
+        } else {
+            $('.keterangan').hide(500);
+            $('#keterangan').val("");
+        }
+    });
+
+    $(document).on('submit', '#formPegawaiOut', function (e) {
+        e.preventDefault();
+        let data = $(this).serialize();
+        let nip = $('#nip_pegawai').val();
+        $.ajax({
+            url: base_url + 'pegawai/moveToPegawaiOut/' + nip,
+            method: "POST",
+            data: data,
+            success: function (data) {
+                var data = JSON.parse(data);
+
+                if (data.statusCode == 200) {
+                    tata.success("Success!", "Pegawai berhasil dikeluarkan!");
+                    $('#modal-to-pegawai-out').modal('hide');
+                    pegawaiList();
+                } else {
+                    tata.error('Error!', 'Oops! Terjadi suatu Kesalahan!');
+                    $('#modal-to-pegawai-out').modal('hide');
+                }
+            }
+        });
+    });
+
+    //show list pegawai out
+    pegawaiOutList();
+
+
+    //pagination pegawai out
+    $(document).on('click', "#pagination_out li a", function (event) {
+        var page_url = $(this).attr('href');
+        pegawaiOutList(page_url);
+        event.preventDefault();
+
+
+
+
+    });
+
+    //search pegawai out
+    $(document).on('keyup', '#searchPegawaiOut', function () {
+        let search_key = $(this).val();
+        let search_temp = search_key.split(' ').join('%20');
+
+        console.log(search_temp);
+
+        var page_url = base_url + 'pegawai/search_out/' + search_temp;
+        if (search_temp == '') {
+            pegawaiOutList();
+        } else {
+            pegawaiOutList(page_url);
+        }
+    });
+
+    //load data pegawai
+    function pegawaiOutList(page_url = false) {
+
+        var base_url2 = base_url + 'pegawai/list_pegawai_out';
+        if (page_url == false) {
+            var page_url = base_url2;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: page_url,
+            beforeSend: function () {
+                //do something
+            },
+            success: function (response) {
+
+                $("#list_pegawai_out").html(response);
+
+            }
+        });
+    }
+
+
+    $(document).on('click', '#btnMasukkanPegawai', function (e) {
+        e.preventDefault();
+
+        let nip = $(this).data("nip");
+
+        Swal.fire({
+            title: 'Anda Yakin Ingin Memasukkan Kembali Pegawai ini?',
+            text: "Anda Tidak Dapat Mengembalikan Aksi ini.",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ffa426',
+            cancelButtonColor: '#757575',
+            confirmButtonText: 'Ya, Saya Yakin',
+            cancelButtonText: 'Batal',
+            showClass: {
+                popup: 'animate__animated animate__fadeInDown'
+            },
+            hideClass: {
+                popup: 'animate__animated animate__fadeOutUp'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: base_url + 'pegawai/masukPegawai/' + nip,
+                    method: "POST",
+                    success: function (data) {
+                        var data = JSON.parse(data);
+                        if (data.statusCode == 200) {
+                           
+                            tata.success('Success', 'Pegawai Berhasil dimasukkan Kembali!');
+                            pegawaiOutList();
+                        } else {
+                            tata.error('Error', 'Oops! Terjadi Kesalahan!');
+                        }
+                    }
+                });
+            }
+        })
+    });
+
+
 
 
 

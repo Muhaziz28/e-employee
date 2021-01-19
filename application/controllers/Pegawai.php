@@ -20,7 +20,7 @@ class Pegawai extends MY_Controller
 
     public function index()
     {
-        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')->get();
+        $data['content']        = $this->pegawai->where('is_out', 1)->join('divisi')->join('jabatan')->get();
         $data['title']          = 'Pegawai - Daftar Pegawai';
         $data['nav_title']      = 'pegawai';
         $data['detail_title']   = 'pegawai';
@@ -31,8 +31,8 @@ class Pegawai extends MY_Controller
 
     public function list_pegawai($page = null)
     {
-        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')->paginate($page)->get();
-        $data['total_rows']     = $this->pegawai->join('divisi')->join('jabatan')->count();
+        $data['content']        = $this->pegawai->where('is_out', 1)->join('divisi')->join('jabatan')->paginate($page)->get();
+        $data['total_rows']     = $this->pegawai->where('is_out', 1)->join('divisi')->join('jabatan')->count();
         $data['pagination']     = $this->pegawai->makePagination(base_url('pegawai/list_pegawai'), 3, $data['total_rows']);
 
         $this->load->view('pages/pegawai/list_pegawai', $data);
@@ -40,16 +40,15 @@ class Pegawai extends MY_Controller
 
     public function search($keyword, $page = null)
     {
-        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')
+        $data['content']        = $this->pegawai->where('is_out', 1)->join('divisi')->join('jabatan')
             ->like('pegawai.nama', urldecode($keyword))
-            ->orLike('pegawai.nip', urldecode($keyword))
-            ->orLike('divisi.nama_divisi', urldecode($keyword))
+
             ->paginate($page)
             ->get();
 
-        $data['total_rows']     = $this->pegawai->join('divisi')->join('jabatan')
+        $data['total_rows']     = $this->pegawai->where('is_out', 1)->join('divisi')->join('jabatan')
             ->like('pegawai.nama', urldecode($keyword))
-            ->orLike('pegawai.nip', urldecode($keyword))
+
 
             ->count();
 
@@ -331,46 +330,6 @@ class Pegawai extends MY_Controller
 
 
 
-    public function tes()
-    {
-        // $date = new DateTime("2020-12-19");
-        // $durasi = 2;
-        // $jenis = 'year';
-        // $date->modify("+$durasi $jenis");
-        // $tanggal_rencana = $date->format('Y-m-d');
-
-        // echo $tanggal_rencana;
-
-        // $curl = curl_init();
-
-        // curl_setopt_array($curl, array(
-        //     CURLOPT_URL => "https://pro.rajaongkir.com/api/province",
-        //     CURLOPT_RETURNTRANSFER => true,
-        //     CURLOPT_ENCODING => "",
-        //     CURLOPT_MAXREDIRS => 10,
-        //     CURLOPT_TIMEOUT => 30,
-        //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-        //     CURLOPT_CUSTOMREQUEST => "GET",
-        //     CURLOPT_HTTPHEADER => array(
-        //         "key: 62227ebac97ed6c2faf55075c50db28c"
-        //     ),
-        // ));
-
-        // $response = curl_exec($curl);
-        // $err = curl_error($curl);
-
-        // curl_close($curl);
-
-        // if ($err) {
-        //     $error = "cURL Error #:" . $err;
-        //     echo $error;
-        // } else {
-        //     print_r($response);
-        // }
-        //return false;
-    }
-
-
     public function detail($nip)
     {
         $data['title']      = 'Lihat Detail Pegawai';
@@ -383,6 +342,376 @@ class Pegawai extends MY_Controller
         //print_r($data['content']);
 
         $this->output->set_output(show_my_modal('pages/pegawai/modal/modal_detail_pegawai', 'modal-detail-pegawai', $data, 'lg'));
+    }
+
+
+    /*
+    * show modal pegawai out
+    *
+    *
+    */
+    public function showModalToPegawaiOut($nip)
+    {
+        $data['pegawai'] = $this->pegawai->select([
+            'pegawai.nip', 'pegawai.nama', 'pegawai.id_divisi', 'pegawai.id_jabatan', 'divisi.id AS id_divisi',
+            'jabatan.id AS id_jabatan',
+            'divisi.nama_divisi', 'jabatan.nama_jabatan'
+        ])
+            ->join('divisi')
+            ->join('jabatan')
+            ->where('nip', $nip)
+            ->first();
+
+        $data['nip'] = $nip;
+
+        $this->output->set_output(show_my_modal('pages/pegawai/modal/modal_to_pegawai_out', 'modal-to-pegawai-out', $data, 'lg'));
+    }
+
+    public function moveToPegawaiOut($nip)
+    {
+
+        $pegawai = $this->pegawai->where('nip', $nip)->first();
+        $status_out = $this->input->post('status_out', true);
+        $keterangan = $this->input->post('keterangan', true);
+
+        $data = array(
+            'nip'               => $pegawai->nip,
+            'nama'              => $pegawai->nama,
+            'email'             => $pegawai->email,
+            'tempat_lahir'      => $pegawai->tempat_lahir,
+            'tgl_lahir'         => $pegawai->tgl_lahir,
+            'nohp'              => $pegawai->nohp,
+            'jenis_kelamin'     => $pegawai->jenis_kelamin,
+            'agama'             => $pegawai->agama,
+            'status'            => $pegawai->status,
+            'pendidikan'        => $pegawai->pendidikan,
+            'status_pegawai'    => $pegawai->status_pegawai,
+            'alamat'            => $pegawai->alamat,
+            'tgl_masuk'         => $pegawai->tgl_masuk,
+            'durasi_kerja'      => $pegawai->durasi_kerja,
+            'satuan_durasi'     => $pegawai->satuan_durasi,
+            'id_divisi'         => $pegawai->id_divisi,
+            'id_jabatan'        => $pegawai->id_jabatan,
+            'id_level'          => $pegawai->id_level,
+            'id_lokasi'         => $pegawai->id_lokasi,
+            'image'             => $pegawai->image,
+            'jatah_cuti'        => $pegawai->jatah_cuti,
+            'password'          => $pegawai->password,
+            'password_generator' => $pegawai->password_generator,
+            'status_out'        => $status_out,
+            'keterangan'        => $keterangan
+
+        );
+
+
+        $this->pegawai->table = 'pegawai_out';
+        if ($this->pegawai->add($data) == true) {
+            $this->pegawai->table = 'pegawai';
+
+            $data_update = array(
+                'is_out'    => 0
+            );
+
+            $this->pegawai->where('nip', $nip)->update($data_update);
+
+            echo json_encode(array(
+                'statusCode'    => 200
+            ));
+        } else {
+            echo json_encode(array(
+                'statusCode'    => 400
+            ));
+        }
+    }
+
+    public function out()
+    {
+        $data['title']          = 'Pegawai - Daftar Pegawai Out';
+        $data['nav_title']      = 'pegawai';
+        $data['detail_title']   = 'pegawai_out';
+        $data['page']           = 'pages/pegawai/out';
+
+        $this->view($data);
+    }
+
+    public function list_pegawai_out($page = null)
+    {
+        $this->pegawai->table = 'pegawai_out';
+        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')->paginate($page)->get();
+        $data['total_rows']     = $this->pegawai->join('divisi')->join('jabatan')->count();
+        $data['pagination']     = $this->pegawai->makePagination(base_url('pegawai/list_pegawai_out'), 3, $data['total_rows']);
+
+        $this->load->view('pages/pegawai/list_pegawai_out', $data);
+    }
+
+    public function search_out($keyword, $page = null)
+    {
+        $this->pegawai->table = 'pegawai_out';
+        $data['content']        = $this->pegawai->join('divisi')->join('jabatan')
+            ->like('pegawai_out.nama', urldecode($keyword))
+
+            ->paginate($page)
+            ->get();
+
+        $data['total_rows']     = $this->pegawai->join('divisi')->join('jabatan')
+            ->like('pegawai_out.nama', urldecode($keyword))
+
+
+            ->count();
+
+        $data['pagination']     = $this->pegawai->makePagination(
+            base_url("pegawai/search_out/" . urldecode($keyword)),
+            4,
+            $data['total_rows']
+        );
+
+        $this->load->view('pages/pegawai/list_pegawai_out', $data);
+    }
+
+    public function masukPegawai($nip)
+    {
+        $this->pegawai->table = 'pegawai';
+
+        if ($nip) {
+            $this->pegawai->where('nip', $nip)->update(['is_out' => 1]);
+            $this->pegawai->table = 'pegawai_out';
+            if ($this->pegawai->where('nip', $nip)->delete()) {
+                echo json_encode(array(
+                    'statusCode'   => 200
+                ));
+            } else {
+                echo json_encode(array(
+                    'statusCode'    => 400
+                ));
+            }
+        }
+    }
+
+    public function exportToExcel($jenis_pegawai)
+    {
+
+        $this->pegawai->table = 'pegawai';
+        if ($jenis_pegawai == "pegawai") {
+            $pegawai    = $this->pegawai->where('is_out', 1)->join('divisi')->join('jabatan')->join('level')->join('lokasi')->get();
+        } else {
+            $this->pegawai->table = 'pegawai_out';
+            $pegawai    = $this->pegawai->get();
+        }
+
+        if ($pegawai) {
+            include_once APPPATH . '/third_party/xlsxwriter.class.php';
+            ini_set('display_errors', 0);
+            ini_set('log_errors', 1);
+            error_reporting(E_ALL & ~E_NOTICE);
+
+            if ($jenis_pegawai == "pegawai") {
+                $filename = "data-pegawai-" . date('d-m-Y-His') . ".xlsx";
+            } else {
+                $filename = "data-pegawai-out-" . date('d-m-Y-His') . ".xlsx";
+            }
+            header('Content-disposition: attachment; filename="' . XLSXWriter::sanitize_filename($filename) . '"');
+            header("Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+            header('Content-Transfer-Encoding: binary');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+
+            $styles = array(
+                'widths' => [7, 30, 25, 38, 17, 25, 19, 20, 28, 29, 55, 30, 20, 27, 27, 20, 20, 20, 20],
+                'heights' => [21],
+                'font' => 'Arial', 'font-size' => 12,
+                'font-style' => 'bold',
+                'fill' => '#eee',
+                'halign' => 'center',
+                'border' => 'left,right,top,bottom',
+                'border-style'  => 'thin'
+            );
+
+            $styles2 = array(
+                [
+                    'font' => 'Arial', 'font-size' => 11,
+                    'halign' => 'left',
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+                [
+                    'font-size' => 11,
+                    'border' => 'left,right,top,bottom',
+                    'border-style'  => 'thin'
+                ],
+
+
+            );
+
+            $header = array(
+                'No'                        => 'integer',
+                'NIP'                       => 'string',
+                'Nama Pegawai'              => 'string',
+                'Email'                     => 'string',
+                'Tempat Lahir'              => 'string',
+                'Tgl Lahir'                 => 'dd/mm/yyyy',
+                'Jenis Kelamin'             => 'string',
+                'Agama'                     => 'string',
+                'Status'                    => 'string',
+                'Status Pegawai'            => 'string',
+                'Alamat'                    => 'string',
+                'No HP'                     => 'string',
+                'Pendidikan'                => 'string',
+                'Divisi'                    => 'string',
+                'Jabatan'                   => 'string',
+                'Level'                     => 'string',
+                'Penempatan'                => 'string',
+                'Tgl Masuk'                 => 'dd/mm/yyyy',
+                'Durasi Kerja'              => 'string',
+
+
+            );
+
+            $writer = new XLSXWriter();
+            $writer->setAuthor('admin');
+
+            $writer->writeSheetHeader('Pegawai', $header, $styles);
+
+            $no = 1;
+
+            foreach ($pegawai as $row) {
+
+                if ($row->durasi_kerja != null) {
+                    if ($row->satuan_durasi == "year") {
+                        $satuan_durasi = "tahun";
+                    } else if ($row->satuan_durasi == "month") {
+                        $satuan_durasi = "bulan";
+                    } else if ($row->satuan_durasi == null) {
+                        $satuan_durasi = "";
+                    }
+                }
+
+
+                $writer->writeSheetRow(
+
+                    'Pegawai',
+                    [
+                        $no,
+                        $row->nip,
+                        $row->nama,
+                        $row->email,
+                        $row->tempat_lahir,
+                        $row->tgl_lahir,
+                        $row->jenis_kelamin,
+                        $row->agama,
+                        $row->status,
+                        $row->status_pegawai,
+                        $row->alamat,
+                        $row->nohp,
+                        $row->pendidikan,
+                        $row->nama_divisi,
+                        $row->nama_jabatan,
+                        $row->nama_level,
+                        $row->nama_lokasi,
+                        $row->tgl_masuk,
+                        $row->durasi_kerja != '' ? $row->durasi_kerja . ' ' . $satuan_durasi : ""
+
+
+
+                    ],
+                    $styles2
+
+
+
+
+
+                );
+
+
+                $no++;
+            }
+            $writer->writeToStdOut();
+        } else {
+        }
     }
 }
 
