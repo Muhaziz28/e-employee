@@ -6,16 +6,18 @@
         </div>
         <div class="sidebar-brand-text mx-3" style="font-size: 13px;">E-Employee</div>
     </a>
-    <hr class="sidebar-divider my-0">
-    <li class="nav-item <?= $nav_title == "home" ? "active" : "" ?>">
-        <a class="nav-link" href="<?= base_url("home"); ?>">
-            <i class="fas fa-home"></i>
-            <span>Home</span></a>
-    </li>
+    <?php if ($role != 'hrd') : ?>
+        <hr class="sidebar-divider my-0">
+        <li class="nav-item <?= $nav_title == "home" ? "active" : "" ?>">
+            <a class="nav-link" href="<?= base_url("home"); ?>">
+                <i class="fas fa-home"></i>
+                <span>Home</span></a>
+        </li>
+    <?php endif ?>
     <?php if ($role == 'hrd') : ?>
         <li class="nav-item <?= $nav_title == "dashboard" ? "active" : "" ?>">
             <a class="nav-link" href="<?= base_url("dashboard"); ?>">
-            <i class="far fa-chart-bar"></i>
+                <i class="far fa-chart-bar"></i>
                 <span>Dashboard</span></a>
         </li>
         <hr class="sidebar-divider">
@@ -118,12 +120,26 @@
             </div>
         </li>
     <?php endif ?>
+
+    <hr class="sidebar-divider">
+    <div class="sidebar-heading">
+        Profile
+    </div>
     <li class="nav-item <?= $nav_title == "profile" ? "active" : "" ?>">
         <a class="nav-link" href="<?= base_url("profile") ?>">
             <i class="fas fa-user"></i>
-            <span>Profile</span>
+            <span>My Profile</span>
         </a>
     </li>
+
+    <?php if ($role != 'hrd') : ?>
+        <li class="nav-item <?= $nav_title == "history_potong_cuti" ? "active" : "" ?>">
+            <a class="nav-link" href="<?= base_url("cuti/history_potong_cuti"); ?>">
+                <i class="fas fa-cut"></i>
+                <span>Riwayat Potong Cuti</span>
+            </a>
+        </li>
+    <?php endif ?>
     <hr class="sidebar-divider">
 
     <div class="version" id="version-ruangadmin"></div>

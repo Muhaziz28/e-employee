@@ -68,6 +68,13 @@
             });
             notifSound();
 
+            let vall = $('.list-notif').data('i');
+
+            if (vall == 0) {
+                $('.list-notif' + vall).attr('data-cek', '1');
+            }
+            //console.log(vall);
+
         }
 
     });

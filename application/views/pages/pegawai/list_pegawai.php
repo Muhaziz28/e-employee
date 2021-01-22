@@ -18,10 +18,10 @@
                                     <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                    
+
                                     <a class="dropdown-item text-danger" href="#" id="btnOutPegawai" data-nip="<?= $row->nip; ?>"><strong>Keluarkan</strong></a>
-                                    
-                                   
+
+
                                 </div>
                             </div>
                         </div>
@@ -31,6 +31,11 @@
                             <p><i class="fas fa-briefcase"></i>&nbsp;<?= $row->nama_divisi; ?></p>
                             <p class="card-text mt-3"><?= $row->alamat; ?></p>
 
+                            <?php if ($row->jatah_cuti <= 3) : ?>
+                                <p>Sisa Jatah Cuti : <span class="text-danger"><strong><?= $row->jatah_cuti; ?>&nbsp;Hari</strong></span></p>
+                            <?php else : ?>
+                                <p>Sisa Jatah Cuti : <span><?= $row->jatah_cuti; ?>&nbsp;Hari</span></p>
+                            <?php endif ?>
                             <a href="<?= base_url("pegawai/edit/$row->nip"); ?>" class="btn btn-primary">Edit</a>
                             <a href="#" class="btn btn-danger" id="btnDeletePegawai" data-nip="<?= $row->nip; ?>">Hapus</a>
                             <a href="#" class="btn btn-info" id="btnLihatPegawai" data-nip="<?= $row->nip; ?>">Lihat</a>

@@ -10,8 +10,9 @@
         <h6 class="dropdown-header">
             Notification
         </h6>
-        <?php foreach ($getNotifCuti as $row) : ?>
-            <a class="dropdown-item d-flex align-items-center" href="#" id="btnLihatCuti" data-id="<?= $row->id; ?>">
+        <?php $i = 0;
+        foreach ($getNotifCuti as $row) : ?>
+            <a class="dropdown-item d-flex align-items-center list-notif" href="#" id="btnLihatCuti" data-id="<?= $row->id; ?>" data-cek="<?= $row->status_notif; ?>">
                 <div class="mr-3">
                     <!-- <div class="icon-circle bg-primary">
               <i class="fas fa-file-alt text-white"></i>
@@ -25,7 +26,8 @@
                     <span class="font-weight-bold"><?= $row->nama; ?>&nbsp;ingin mengajukan cuti!</span>
                 </div>
             </a>
-        <?php endforeach ?>
+        <?php $i++;
+        endforeach ?>
 
         <a class="dropdown-item text-center small text-gray-500" href="<?= base_url("cuti"); ?>">Lihat Semua Daftar Cuti</a>
     </div>

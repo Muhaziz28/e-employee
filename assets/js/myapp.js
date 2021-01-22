@@ -21,6 +21,8 @@ $(document).ready(function () {
         autoclose: true,
     });
 
+
+
     $('#nip_pegawai_potong_cuti').select2({
         placeholder: "- Pilih Pegawai -",
         allowClear: true
@@ -1315,6 +1317,7 @@ $(document).ready(function () {
                     $('#modal-add-cuti').modal('hide');
                     Swal.close();
                     tata.success('Success', 'Pengajuan Cuti berhasil dilakukan, harap tunggu konfirmasi HRD');
+
                     //window.location.href = base_url + 'dashboard#success';
 
 
@@ -1324,6 +1327,8 @@ $(document).ready(function () {
             }
         });
     });
+
+
 
     $(document).on('click', '#tes', function (e) {
         e.preventDefault();
@@ -1548,11 +1553,42 @@ $(document).ready(function () {
                     buttonup_class: 'btn btn-secondary',
                 });
 
+                $('#potong-cuti-tgl .input-daterange').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true,
+                    todayBtn: 'linked',
+                });
+
                 $('#anim3').hide();
                 $('#textAnim3').hide();
             }
         });
     }
+
+    $(document).on('change', '#tgl_start', function () {
+
+        let start = $(this).val();
+
+        let split = start.split("/")
+        let conv_start = split[2] + "-" + split[1] + "-" + split[0];
+
+
+        $('#tgl_start_temp').val(conv_start);
+    });
+
+    $(document).on('change', '#tgl_end', function () {
+
+        let end = $(this).val();
+
+        let split = end.split("/")
+        let conv_end = split[2] + "-" + split[1] + "-" + split[0];
+
+
+        $('#tgl_end_temp').val(conv_end);
+    });
+
+
 
     $(document).on('change', '#nip_pegawai_potong_cuti', function () {
         let jatah_cuti = $('#nip_pegawai_potong_cuti option:selected').data("cuti");
@@ -1567,14 +1603,18 @@ $(document).ready(function () {
 
         //get value from form
         let nip_pegawai = $('#nip_pegawai_potong_cuti').val();
-        let jatah_cuti = $('#jatah_cuti').val();
+        let tgl_start = $('#tgl_start_temp').val();
+        let tgl_end = $('#tgl_end_temp').val();
+
+        let alasan = $('#alasan').val();
+        //let jatah_cuti = $('#jatah_cuti').val();
         let jatah_cuti_from_db = $('#jatah_cuti_from_db').val();
 
         //do ajax
         $.ajax({
             url: base_url + 'cuti/potong_jatah_cuti_pegawai',
             method: "POST",
-            data: { nip_pegawai: nip_pegawai, jatah_cuti: jatah_cuti, jatah_cuti_from_db: jatah_cuti_from_db },
+            data: { nip_pegawai: nip_pegawai, tgl_start: tgl_start, tgl_end: tgl_end, alasan: alasan, jatah_cuti_from_db: jatah_cuti_from_db },
             success: function (data) {
                 var data = JSON.parse(data);
                 if (data.statusCode == 200) {
@@ -1586,7 +1626,7 @@ $(document).ready(function () {
                         allowClear: true
                     });
                     $('#nip_pegawai_error').html('');
-                    tata.success('Success', 'Data Berhasil Ditambahkan!');
+                    tata.success('Success', 'Cuti Pegawai Berhasil Dipotong!');
                     showFormPotongCuti();
 
                 } else if (data.statusCode == 201) {
@@ -1597,12 +1637,6 @@ $(document).ready(function () {
                         console.log(data.nip_pegawai_error);
                         if (data.nip_pegawai_error != '') {
                             $('#nip_pegawai_error').html(data.nip_pegawai_error);
-
-
-                        }
-
-                        if (data.jatah_cuti_error != '') {
-                            $('#jatah_cuti_error').html(data.jatah_cuti_error);
 
 
                         }
@@ -2074,7 +2108,7 @@ $(document).ready(function () {
                     success: function (data) {
                         var data = JSON.parse(data);
                         if (data.statusCode == 200) {
-                           
+
                             tata.success('Success', 'Pegawai Berhasil dimasukkan Kembali!');
                             pegawaiOutList();
                         } else {
@@ -2085,6 +2119,19 @@ $(document).ready(function () {
             }
         })
     });
+
+    //load riwayat potong cuti pegawai
+    loadTablePotongCutiPegawai('cuti/loadTablePotongCutiPegawai');
+    function loadTablePotongCutiPegawai(url2) {
+        $.ajax({
+            type: "POST",
+            url: base_url + url2,
+            success: function (response) {
+                $('.list-data-potong-cuti').html(response);
+                $('#dataTableHover').DataTable();
+            }
+        });
+    }
 
 
 

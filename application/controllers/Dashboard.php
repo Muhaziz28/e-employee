@@ -13,6 +13,19 @@ class Dashboard extends MY_Controller
         parent::__construct();
         $role = $this->session->userdata('role');
 
+        $this->dashboard->table = 'cuti';
+        $jumlahNotif = $this->dashboard->where('status_notif', 0)->orderBy('created_at', 'DESC')->limit(4)->count();
+
+        if ($jumlahNotif > 0) {
+            $array = array(
+                'jumlahNotif' => $jumlahNotif
+            );
+
+            $this->session->set_userdata($array);
+        } else {
+            $this->session->unset_userdata('jumlahNotif');
+        }
+
         if ($role != 'hrd') {
             redirect(base_url());
             return;
@@ -24,7 +37,11 @@ class Dashboard extends MY_Controller
     {
 
         //grafik jumlah pegawai
+        $this->dashboard->table     = 'pegawai';
         $data['countPegawai']       = $this->dashboard->where('is_out', 1)->count();
+
+        $this->dashboard->table     = 'pegawai_out';
+        $data['countPegawaiOut']    = $this->dashboard->count();
 
         $this->dashboard->table     = 'cuti';
         $data['countCuti']          = $this->dashboard->count();

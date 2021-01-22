@@ -55,17 +55,11 @@ class Cuti_model extends MY_Model
     {
         $validationRules = [
 
-            [
-                'field' => 'jatah_cuti',
-                'label' => 'Jatah Cuti',
-                'rules' => 'required|trim'
-            ],
-
-
+           
 
             [
                 'field' => 'nip_pegawai',
-                'label' => 'Nama Pegawai',
+                'label' => 'Pegawai',
                 'rules' => 'required'
             ],
 
