@@ -332,7 +332,13 @@ class Cuti extends MY_Controller
     public function potong_jatah_cuti_pegawai()
     {
         $nip_pegawai = $this->input->post('nip_pegawai', true);
-        $jatah_cuti = $this->input->post('jatah_cuti', true);
+        //$jatah_cuti = $this->input->post('jatah_cuti', true);
+
+        $tgl_start = $this->input->post('tgl_start', true);
+        $tgl_end   = $this->input->post('tgl_end', true);
+        $alasan    = $this->input->post('alasan', true);
+        $diff      = date_diff(new DateTime($tgl_start), new DateTime($tgl_end));
+        $jatah_cuti = ($diff->d + 1);
         $jatah_cuti_from_db = $this->input->post('jatah_cuti_from_db', true);
 
         if (!$this->cuti->validate2()) {
@@ -341,19 +347,38 @@ class Cuti extends MY_Controller
                 'error' => true,
                 'statusCode' => 400,
                 'nip_pegawai_error' => form_error('nip_pegawai'),
-                'jatah_cuti_error'    => form_error('jatah_cuti')
+
 
             );
 
             echo json_encode($array);
         } else {
+
+            $update_jatah_cuti = $jatah_cuti_from_db - $jatah_cuti < 0 ? 0 : $jatah_cuti_from_db - $jatah_cuti;
             $data = [
-                'jatah_cuti' => $jatah_cuti_from_db - $jatah_cuti
+                'jatah_cuti' => $update_jatah_cuti
             ];
 
             $this->cuti->table = 'pegawai';
 
             if ($this->cuti->where('pegawai.nip', $nip_pegawai)->update($data)) {
+
+                if ($update_jatah_cuti != 0) {
+                    $this->cuti->table = 'potong_cuti';
+                    $data_insert = array(
+                        'id'        => date('YmdHis') . rand(pow(10, 4 - 1), pow(10, 4) - 1),
+                        'nip'       => $nip_pegawai,
+                        'tgl_start' => $tgl_start,
+                        'tgl_end'   => $tgl_end,
+                        'jumlah'    => $jatah_cuti,
+                        'alasan'    => $alasan
+                    );
+
+                    $this->cuti->add($data_insert);
+                }
+
+
+
                 echo json_encode(array(
                     "statusCode" => 200,
 
@@ -381,6 +406,26 @@ class Cuti extends MY_Controller
             $data['getCuti']        = $this->cuti->orderBy('created_at', 'DESC')->where('nip_pegawai', $nip)->get();
         }
         $this->load->view('pages/cuti/modal/table_ajax', $data);
+    }
+
+    public function history_potong_cuti()
+    {
+        $data['title']          = 'Riwayat Potong Cuti - Cuti Pegawai';
+        $data['nav_title']      = 'history_potong_cuti';
+        $data['detail_title']   = 'history_potong_cuti';
+
+        $this->cuti->table      = 'potong_cuti';
+        $data['getPegawai']     = $this->cuti->where('nip', $this->session->userdata('nip'))->get();
+        $data['page']           = 'pages/cuti/history_potong_cuti';
+
+        $this->view($data);
+    }
+
+    public function loadTablePotongCutiPegawai()
+    {
+        $this->cuti->table      = 'potong_cuti';
+        $data['content']        =  $this->cuti->where('nip', $this->session->userdata('nip'))->get();
+        $this->load->view('pages/cuti/history_potong_cuti_table_ajax', $data);
     }
 }
 
