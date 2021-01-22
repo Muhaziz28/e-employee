@@ -7,7 +7,7 @@ class Pegawai_model extends MY_Model
 {
 
     public $table = 'pegawai';
-    protected $perPage = 3;
+    protected $perPage = 6;
 
     public function getValidationRules()
     {
