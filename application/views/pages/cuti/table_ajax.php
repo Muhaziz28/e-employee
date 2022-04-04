@@ -8,7 +8,7 @@
                 <th>Nama Pegawai</th>
                 <th>Jenis Cuti</th>
                 <th>Status</th>
-                <th>Sisa Cuti Berlangsung</th>
+                <!-- <th>Sisa Cuti Berlangsung</th> -->
                 <th>Action</th>
             </tr>
         </thead>
@@ -30,7 +30,7 @@
                         $jenisBadge = "danger";
                     } ?>
                     <td><span class="badge badge-<?= $jenisBadge; ?>"><?= ucwords($row->status_cuti); ?></span></td>
-                    <?php
+                    <!-- <?php
 
                     //untuk mendapatkan tgl akhir cuti
                     $date = new DateTime($row->tgl_cuti);
@@ -42,21 +42,26 @@
                     $tgl_sekarang = date("Y-m-d");
                     $diff = date_diff(new DateTime($tgl_akhir), new DateTime($tgl_sekarang));
                     // end durasi hari cuti pegawai
-                    
+
                     ?>
                     <?php if ($row->status_cuti == "diterima") { ?>
                         <?php if ($row->tgl_cuti <= date("Y-m-d")) :  ?>
-                            <?php if ($diff->d >= 2) { ?>
+                            <?php if ($diff->d - 1 >= 2) { ?>
                                 <td><?= $diff->d . ' hari lagi'; ?></td>
-                            <?php } else if ($diff->d < 2 && $diff->d <= 0) { ?>
+                            <?php } else if ($diff->d - 1 < 2 && $diff->d - 1 == 0) { ?>
+
+
                                 <td class="bg-warning text-white"><?= $diff->d . ' hari lagi'; ?></td>
+
                             <?php } else { ?>
-                                <?php if ($tgl_akhir != date("Y-m-d")) : ?>
+                                <?php if ($row->tgl_cuti < date("Y-m-d")) : ?>
                                     <td class="bg-danger text-white"><?= "Cuti Berakhir" ?></td>
                                 <?php else : ?>
                                     <td class="bg-warning text-white"><?= "Berakhir Hari Ini" ?></td>
                                 <?php endif ?>
                             <?php } ?>
+
+
                         <?php else : ?>
                             <td><?= "Cuti Belum Dimulai" ?></td>
                         <?php endif ?>
@@ -64,7 +69,7 @@
                         <td><?= "Cuti Ditolak"; ?></td>
                     <?php } else { ?>
                         <td><?= "-" ?></td>
-                    <?php }  ?>
+                    <?php }  ?> -->
 
                     <td>
                         <a href="#" class="btn btn-info" id="btnLihatCuti" data-id="<?= $row->id; ?>"> Lihat</a>

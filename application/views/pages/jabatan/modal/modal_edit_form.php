@@ -21,7 +21,7 @@
                 <select class="select2-single form-control" name="id_divisi" id="id_divisi_jabatan_edit">
                     <option></option>
                     <?php foreach ($getDivisi as $row) : ?>
-                        <option value="<?= $row->id; ?>" <?= $row->id == $getJabatan->id_divisi ? "selected" : "" ?>><?= $row->nama_divisi; ?></option>
+                        <option value="<?= $row->id; ?>" <?= $row->id == $getJabatan->id_divisi ? "selected" : "" ?> ><?= $row->nama_divisi; ?></option>
                     <?php endforeach ?>
                 </select>
                 <span id="nama_divisi_error"></span>
@@ -30,7 +30,7 @@
         <div class="form-group row">
             <label for="inputPassword3" class="col-sm-3 col-form-label">Keterangan</label>
             <div class="col-sm-9">
-                <textarea class="form-control" id="ket_jabatan_jabatan" placeholder="Keterangan" rows="4" name="ket"><?= $getJabatan->ket; ?></textarea>
+                <textarea class="form-control" id="ket_jabatan_edit" placeholder="Keterangan" rows="4" name="ket"><?= $getJabatan->ket; ?></textarea>
 
             </div>
         </div>
@@ -42,3 +42,9 @@
         <button type="submit" class="btn btn-warning">Kirim</a>
     </div>
 </form>
+
+<script>
+    $(function() {
+        CKEDITOR.replace('ket_jabatan_edit');
+    });
+</script>

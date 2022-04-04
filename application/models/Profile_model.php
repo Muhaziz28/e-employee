@@ -16,6 +16,21 @@ class Profile_model extends MY_Model
                 'label' => 'Nama',
                 'rules' => 'required|trim'
             ],
+            [
+                'field' => 'email',
+                'label' => 'Email',
+                'rules' => 'required|trim'
+            ],
+            [
+                'field' => 'tempat_lahir',
+                'label' => 'Tempat Lahir',
+                'rules' => 'required|trim'
+            ],
+            [
+                'field' => 'tgl_lahir',
+                'label' => 'Tanggal Lahir',
+                'rules' => 'required|trim'
+            ],
             
 
         ];

@@ -77,7 +77,26 @@
                     <tr>
                         <td>Lama Cuti</td>
                         <td>:</td>
-                        <td><?= $content->lama_cuti; ?>&nbsp;Hari</td>
+                        <?php
+                        $tgl1 = $content->tgl_cuti;
+                        $tgl2 = date('Y-m-d', strtotime('+' . $content->lama_cuti - 1 . 'days', strtotime($tgl1)));
+
+
+
+                        ?>
+                        <td>
+                            <?= $content->lama_cuti; ?>&nbsp;Hari&nbsp;(<?= date_format(new DateTime($tgl2), "d-m-Y"); ?>)&nbsp;
+                            <a href="#" class="showRentang">Munculkan Rentang Cuti</a>
+                            <div id="rentang" class="mt-3">
+                                <div class="input-daterange input-group">
+                                    <input type="text" class="input-sm form-control" id="tgl_start" placeholder="Tgl Awal" value="<?= date_format(new DateTime($content->tgl_cuti), "d-m-Y"); ?>" />
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text bg-secondary" style="border-color: #757575;">s/d</span>
+                                    </div>
+                                    <input type="text" class="input-sm form-control" id="tgl_end" placeholder="Tgl Akhir" value="<?= date_format(new DateTime($tgl2), "d-m-Y"); ?>" />
+                                </div>
+                            </div>
+                        </td>
 
                     </tr>
                     <tr>
@@ -134,3 +153,28 @@
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Tutup</button>
 
 </div>
+
+<script>
+    //$('#rentang').hide();
+    $(document).on('click', '.showRentang', function() {
+        // $('.datepicker').datepicker({
+        //     format: 'yyyy-mm-dd',
+        //     startDate: '2021-03-01',
+        //     endDate: '2021-03-31',
+        //     todayBtn: 'linked'
+        // });
+
+        //$('.datepicker').datepicker('show');
+
+
+        $('#rentang .input-daterange').datepicker({
+            format: 'dd-mm-yyyy',
+            autoclose: true,
+            todayHighlight: false,
+            todayBtn: 'linked',
+        });
+        $('#tgl_end').datepicker('show');
+
+
+    });
+</script>

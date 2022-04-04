@@ -10,10 +10,12 @@
     <title><?= isset($title) ? $title : "Soraya Bedshet -" ?></title>
     <!-- style -->
     <?php $this->load->view('layouts/_style'); ?>
+
+
     <!--style-->
 </head>
 
-<body id="page-top" data-role="<?= $this->session->userdata('role'); ?>">
+<body id="page-top" data-role="<?= $this->session->userdata('role'); ?>" style="display: none;">
     <div id="wrapper">
         <!-- Sidebar -->
         <?php $this->load->view('layouts/_sidebar'); ?>

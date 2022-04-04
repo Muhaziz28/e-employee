@@ -1,6 +1,7 @@
-const base_url = 'http://localhost/soraya_employee/';
+const base_url = 'https://hrd.sorayabedsheet.id/';
 const flashdata = $('.flash-data').data('flashdata');
 const message = $('.flash-data').data('message');
+
 
 
 
@@ -8,6 +9,16 @@ $(document).ready(function () {
     $('#dataTable').DataTable(); // ID From dataTable 
     $('#dataTableHover').DataTable(); // ID From dataTable with Hover
 
+    $.fn.modal.Constructor.prototype.enforceFocus = function () {
+        modal_this = this
+        $(document).on('focusin.modal', function (e) {
+            if (modal_this.$element[0] !== e.target && !modal_this.$element.has(e.target).length
+                && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_select')
+                && !$(e.target.parentNode).hasClass('cke_dialog_ui_input_text')) {
+                modal_this.$element.focus()
+            }
+        })
+    };
 
     if (flashdata == 'Success!') {
         tata.success(flashdata, message);
@@ -15,6 +26,13 @@ $(document).ready(function () {
 
 
     $('#simple-date1 .input-group.date').datepicker({
+        format: 'yyyy-mm-dd',
+        todayBtn: 'linked',
+        todayHighlight: true,
+        autoclose: true,
+    });
+
+    $('#tambah-pegawai-in-out .input-group.date').datepicker({
         format: 'yyyy-mm-dd',
         todayBtn: 'linked',
         todayHighlight: true,
@@ -256,6 +274,7 @@ $(document).ready(function () {
                     allowClear: true
                 });
                 $('#modal-add-jabatan').modal('show');
+
 
             });
     });
@@ -725,6 +744,22 @@ $(document).ready(function () {
                             $('#tgl_masuk_pegawai').removeClass('is-invalid').addClass('is-valid');
                         }
 
+                        if (data_response.tgl_mulai_kontrak_error != '') {
+                            $('#tgl_mulai_kontrak').html(data_response.tgl_mulai_kontrak_error);
+                            $('#tgl_mulai_kontrak').removeClass('is-valid').addClass('is-invalid');
+                        } else {
+                            $('#tgl_mulai_kontrak').html('');
+                            $('#tgl_mulai_kontrak').removeClass('is-invalid').addClass('is-valid');
+                        }
+
+                        if (data_response.tgl_akhir_kontrak_error != '') {
+                            $('#tgl_akhir_kontrak').html(data_response.tgl_akhir_kontrak_error);
+                            $('#tgl_akhir_kontrak').removeClass('is-valid').addClass('is-invalid');
+                        } else {
+                            $('#tgl_akhir_kontrak').html('');
+                            $('#tgl_akhir_kontrak').removeClass('is-invalid').addClass('is-valid');
+                        }
+
                         if (data_response.id_divisi_error != '') {
                             $('#id_divisi_error').html(data_response.id_divisi_error);
                         } else {
@@ -780,91 +815,40 @@ $(document).ready(function () {
     //     });
     // }
 
-    $(document).on('change', '#formTambahPegawai input[name=tgl_masuk]', function () {
-        let gender = $('input[name=jenis_kelamin]:checked', '#formTambahPegawai').val();
-        let getTahun = $('#tgl_masuk_pegawai').val();
-
-        let tahun_masuk = getTahun.split("-");
-
-        $.ajax({
-            type: "POST",
-            url: base_url + 'pegawai/showNipMax/' + gender,
-            success: function (data) {
-                var data = JSON.parse(data);
-                $('#nip_max_pegawai').val(data.nip);
-            }
-        });
-
-        let nip_max = $('#nip_max_pegawai').val();
-
-        let nip = nipGenerator(gender, tahun_masuk[0].substring(2, tahun_masuk[0].length), nip_max);
-        $('#nip_pegawai').val(nip);
-
-
-
-
-    });
-
-    $(document).on('change', '#formTambahPegawai input[name=jenis_kelamin]', function () {
-        let gender = $('input[name=jenis_kelamin]:checked', '#formTambahPegawai').val();
-
-        let getTahun = $('#tgl_masuk_pegawai').val();
-
-        let tahun_masuk = getTahun.split("-");
-        $.ajax({
-            type: "POST",
-            url: base_url + 'pegawai/showNipMax/' + gender,
-            success: function (data) {
-                var data = JSON.parse(data);
-                $('#nip_max_pegawai').val(data.nip);
-            }
-        });
-
-
-        let nip_max = $('#nip_max_pegawai').val();
-
-        let nip = nipGenerator(gender, tahun_masuk[0].substring(2, tahun_masuk[0].length), nip_max);
-        $('#nip_pegawai').val(nip);
-
-
-
-    });
-
     $(document).on('change', '#status_pegawai', function () {
 
         let valueStatusPegawai = $('#status_pegawai option:selected').val();
 
         if (valueStatusPegawai == "Kontrak") {
-            $('#satuan_durasi_pegawai').prop("disabled", false); //element are now enabled.
-            $('#durasi_kerja_pegawai').prop("disabled", false);
+            $('#tgl_mulai_kontrak').prop("disabled", false); //element are now enabled.
+            $('#tgl_akhir_kontrak').prop("disabled", false);
+
         } else {
-            $('#satuan_durasi_pegawai').prop("disabled", true); //element are now disabled.
-            $('#durasi_kerja_pegawai').prop("disabled", true);
+            $('#tgl_mulai_kontrak').prop("disabled", true); //element are now disabled.
+            $('#tgl_akhir_kontrak').prop("disabled", true);
         }
 
 
 
     });
 
+    $(document).on('change', '#id_level_pegawai', function() {
+        let id_level = $('#id_level_pegawai option:selected').val();
+        $.ajax({
+            url: base_url + 'pegawai/load_grade_opt?id_level=' + id_level,
+            method: "GET",
+            beforeSend: function() {
+                topbar.show();
+            },
+            success: function(response) {
+                $('#id_grade_pegawai').html(response);
+                topbar.hide();
+            }
+        });
+    });
+
     //fungsi untuk generate nip
-    function nipGenerator(gender, tahunMasuk, kodeMax) {
-        let kodeGender = gender == "Laki-laki" ? "01" : "02";
 
-        if (kodeMax != '' || kodeMax != undefined) {
-            let count = Number(kodeMax.substring(4, kodeMax.length));
-            count++;
-            var ans = count.toString().padStart(4, '0');
-
-            let nip = kodeGender + tahunMasuk + ans;
-            return nip;
-        } else {
-            let nip = kodeGender + tahunMasuk + '0001';
-            return nip;
-        }
-
-
-
-    }
 
 
 
@@ -968,9 +952,11 @@ $(document).ready(function () {
             url: page_url,
             beforeSend: function () {
                 //do something
+                //$('.load-pegawai').show();
+                //$('#result-pegawai').remove();
             },
             success: function (response) {
-
+                //$('.load-pegawai').hide();
                 $("#list_pegawai").html(response);
 
             }
@@ -1132,6 +1118,22 @@ $(document).ready(function () {
                         } else {
                             $('#tgl_masuk_error').html('');
                             $('#tgl_masuk_pegawai').removeClass('is-invalid').addClass('is-valid');
+                        }
+
+                        if (data_response.tgl_mulai_kontrak_error != '') {
+                            $('#tgl_mulai_kontrak_error').html(data_response.tgl_mulai_kontrak_error);
+                            $('#tgl_mulai_kontrak').removeClass('is-valid').addClass('is-invalid');
+                        } else {
+                            $('#tgl_mulai_kontrak_error').html('');
+                            $('#tgl_mulai_kontrak').removeClass('is-invalid').addClass('is-valid');
+                        }
+
+                        if (data_response.tgl_akhir_kontrak_error != '') {
+                            $('#tgl_akhir_kontrak_error').html(data_response.tgl_akhir_kontrak_error);
+                            $('#tgl_akhir_kontrak').removeClass('is-valid').addClass('is-invalid');
+                        } else {
+                            $('#tgl_akhir_kontrak_error').html('');
+                            $('#tgl_akhir_kontrak').removeClass('is-invalid').addClass('is-valid');
                         }
 
                         if (data_response.id_divisi_error != '') {
@@ -1570,7 +1572,7 @@ $(document).ready(function () {
 
         let start = $(this).val();
 
-        let split = start.split("/")
+        let split = start.split("/");
         let conv_start = split[2] + "-" + split[1] + "-" + split[0];
 
 
@@ -1581,7 +1583,7 @@ $(document).ready(function () {
 
         let end = $(this).val();
 
-        let split = end.split("/")
+        let split = end.split("/");
         let conv_end = split[2] + "-" + split[1] + "-" + split[0];
 
 
@@ -1929,6 +1931,9 @@ $(document).ready(function () {
 
         //get value from form
         let nama = $('#nama_edit_profile').val();
+        let email = $('#email_edit_profile').val();
+        let tempat_lahir = $('#tempat_lahir_edit_profile').val();
+        let tgl_lahir = $('#tgl_lahir_edit_profile').val();
         let password = $('#password_edit_profile').val();
         let confirm_password = $('#confirm_password_edit_profile').val();
 
@@ -1936,7 +1941,7 @@ $(document).ready(function () {
         $.ajax({
             url: base_url + 'profile/update',
             method: "POST",
-            data: { nama: nama, password: password, confirm_password: confirm_password },
+            data: { nama: nama, email: email, tempat_lahir: tempat_lahir, tgl_lahir: tgl_lahir, password: password, confirm_password: confirm_password },
             success: function (data) {
                 var data = JSON.parse(data);
                 if (data.statusCode == 200) {
@@ -1957,6 +1962,21 @@ $(document).ready(function () {
                             $('#nama_error').html(data.nama_error);
                             $('#nama_edit_profile').removeClass('is-valid').addClass('is-invalid');
 
+                        }
+
+                        if(data.email_error != '') {
+                            $('email_error').html(data.email_error);
+                            $('email_edit_profile').removeClass('is-valid').addClass('is-invalid');
+                        }
+
+                        if(data.tempat_lahir_error != '') {
+                            $('tempat_lahir').html(data.tempat_lahir_error);
+                            $('tempat_lahir_edit_profile').removeClass('is-valid').addClass('is-invalid');
+                        }
+
+                        if(data.tgl_lahir_error != '') {
+                            $('tgl_lahir').html(data.tgl_lahir_error);
+                            $('email_edit_profile').removeClass('is-valid').addClass('is-invalid');
                         }
 
 
@@ -2057,7 +2077,7 @@ $(document).ready(function () {
         }
     });
 
-    //load data pegawai
+    //load data pegawai out
     function pegawaiOutList(page_url = false) {
 
         var base_url2 = base_url + 'pegawai/list_pegawai_out';
@@ -2078,6 +2098,26 @@ $(document).ready(function () {
             }
         });
     }
+
+    $(document).on('click', '#btnLihatPegawaiOut', function(e) {
+        e.preventDefault();
+
+        let nip     = $(this).data('nip');
+
+        $.ajax({
+            type: "POST",
+            url: base_url + 'pegawai/detail_out/' + nip,
+            beforeSend: function() {
+                topbar.show();
+            },
+            success: function(response) {
+                $('#wadahModalDetailPegawaiOut').html(response);
+                $('#modal-detail-pegawai-out').modal('show');
+
+                topbar.hide();
+            }
+        });
+    });
 
 
     $(document).on('click', '#btnMasukkanPegawai', function (e) {
@@ -2132,6 +2172,8 @@ $(document).ready(function () {
             }
         });
     }
+
+
 
 
 

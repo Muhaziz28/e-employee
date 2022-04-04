@@ -16,7 +16,7 @@
                 <tr>
                     <td><?= $i++; ?></td>
                     <td><?= $row->nama_lokasi; ?></td>
-                    <td><?= $row->alamat; ?></td>
+                    <td><?= $row->alamat_lokasi; ?></td>
                     <td>
                         <a href="#" class="btn btn-info" id="btnEditLokasi" data-id="<?= $row->id; ?>"> Edit</a>
                         <a href="#" class="btn btn-danger" id="btnDeleteLokasi" data-id="<?= $row->id; ?>">Delete</a>

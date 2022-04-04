@@ -33,7 +33,21 @@ class MY_Model extends CI_Model
         );
         $validationRules = $this->getValidationRules();
         $this->form_validation->set_rules($validationRules);
-        
+
+
+        return $this->form_validation->run();
+    }
+
+    public function validate_array($i)
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_error_delimiters(
+            '<small class="form-text text-danger" data-index="' . $i . '">',
+            '</small>'
+        );
+        $validationRules = $this->getValidationArrayRules($i);
+        $this->form_validation->set_rules($validationRules);
+
 
         return $this->form_validation->run();
     }
@@ -47,7 +61,7 @@ class MY_Model extends CI_Model
         );
         $validationRules = $this->getValidationRules2();
         $this->form_validation->set_rules($validationRules);
-        
+
 
         return $this->form_validation->run();
     }
@@ -55,6 +69,12 @@ class MY_Model extends CI_Model
     public function select($columns)
     {
         $this->db->select($columns);
+        return $this;
+    }
+
+    public function select_max($columns)
+    {
+        $this->db->select_max($columns);
         return $this;
     }
 
@@ -101,11 +121,30 @@ class MY_Model extends CI_Model
         return $this;
     }
 
+    public function joinKpi($table, $type = 'left')
+    {
+        $this->db->join($table, "$this->table.nip = $table.nip_$this->table", $type);
+        return $this;
+    }
+
     public function joinPegawai($table, $type = 'left')
     {
         $this->db->join($table, "$this->table.nip_$table = $table.nip", $type);
         return $this;
     }
+
+    public function joinGaji($table, $type = 'left')
+    {
+        $this->db->join($table, "$this->table.nip = $table.nip_$this->table", $type);
+        return $this;
+    }
+
+    public function joinLogGaji($table, $type = 'left')
+    {
+        $this->db->join($table, "$this->table.nip = $table.nip_$this->table", $type);
+        return $this;
+    }
+
     public function xjoin($table, $type = 'left')
     {
         $this->db->join($table, "$this->table.id = $table.id_$this->table");
@@ -172,6 +211,12 @@ class MY_Model extends CI_Model
     public function add($data)
     {
         $this->db->insert($this->table, $data);
+        return true;
+    }
+
+    public function add_batch($data)
+    {
+        $this->db->insert_batch($this->table, $data);
         return true;
     }
 
@@ -260,8 +305,6 @@ class MY_Model extends CI_Model
         $this->pagination->initialize($config);
         return $this->pagination->create_links();
     }
-
-    
 }
 
 /* End of file MY_Model.php */

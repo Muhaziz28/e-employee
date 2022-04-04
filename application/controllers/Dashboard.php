@@ -32,6 +32,11 @@ class Dashboard extends MY_Controller
         }
     }
 
+    public function tes()
+    {
+        $this->dashboard->table     = 'pegawai';
+    }
+
 
     public function index()
     {
@@ -39,6 +44,34 @@ class Dashboard extends MY_Controller
         //grafik jumlah pegawai
         $this->dashboard->table     = 'pegawai';
         $data['countPegawai']       = $this->dashboard->where('is_out', 1)->count();
+
+        $data['pegawai']       = $this->dashboard->where('is_out', 1)->get();
+
+        $count = 0;
+        $count2 = 0;
+        $count3 = 0;
+        foreach ($data['pegawai'] as $row) {
+            $date_diff = date_diff(new DateTime($row->tgl_masuk), new DateTime(date("Y-m-d")));
+
+            //kurang dari setahun
+            if ($date_diff->y < 1) {
+                $count++;
+            }
+
+            //1 - 5 tahun
+            if ($date_diff->y >= 1 && $date_diff->y <= 5) {
+                $count2++;
+            }
+
+            //lebih dari 5 tahun
+            if ($date_diff->y > 5) {
+                $count3++;
+            }
+        }
+
+        $data['kurangsetahun']      = $count;
+        $data['rentang']            = $count2;
+        $data['lebihdarirentang']   = $count3;
 
         $this->dashboard->table     = 'pegawai_out';
         $data['countPegawaiOut']    = $this->dashboard->count();

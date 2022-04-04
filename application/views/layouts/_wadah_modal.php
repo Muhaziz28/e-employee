@@ -53,3 +53,51 @@
 <div id="wadahModalPegawaiOut">
 
 </div>
+
+<div id="wadahModalTambahGaji">
+
+</div>
+
+<div id="wadahModalEditGaji">
+
+</div>
+
+<div id="wadahModalViewSlipGaji">
+
+</div>
+
+<div id="wadahModalRiwayatGaji">
+
+</div>
+
+<div id="wadahModalTambahGrade">
+
+</div>
+
+<div id="wadahModalEditGrade">
+
+</div>
+
+<div id="wadahModalDetailGaji">
+
+</div>
+
+<div id="wadahModalDetailPegawaiOut">
+
+</div>
+
+<div id="modalGenerateIdCardPegawai">
+
+</div>
+
+<?php if ($nav_title == 'home' || $nav_title == 'aktivitas') : ?>
+    <?php $this->load->view('pages/activity/modal/modal_add_activity'); ?>
+
+    <div id="modalEditActivity">
+
+    </div>
+<?php endif ?>
+
+<?php if ($nav_title == 'pegawai') : ?>
+    <?php $this->load->view('pages/pegawai/modal/modal_filter'); ?>
+<?php endif ?>

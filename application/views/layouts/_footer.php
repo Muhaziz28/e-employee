@@ -4,7 +4,7 @@
             <span>copyright &copy; <script>
                     document.write(new Date().getFullYear());
                 </script> - developed by
-                <b><a href="https://www.sorayabedsheet.id" target="_blank">Soraya Bedsheet</a></b>
+                <b><a href="https://github.com/riobrotha" target="_blank">Rio Pambudhi</a></b>
             </span>
         </div>
     </div>

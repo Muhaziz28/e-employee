@@ -58,7 +58,7 @@ class Lokasi extends MY_Controller
         } else {
             $data = [
                 'nama_lokasi' => $nama_lokasi,
-                'alamat'         => $alamat
+                'alamat_lokasi'         => $alamat
             ];
 
             if ($this->lokasi->add($data) == true) {

@@ -12,6 +12,8 @@ class Login extends MY_Controller
         $is_login   = $this->session->userdata('is_login');
         //$role = $this->session->userdata('role');
 
+
+
         if ($is_login) {
             redirect(base_url("home"));
             return;
@@ -32,6 +34,12 @@ class Login extends MY_Controller
 
             // }
         }
+    }
+
+    public function tes()
+    {
+        $ip = $_SERVER['REMOTE_ADDR'];
+        echo $ip;
     }
 
     public function index()

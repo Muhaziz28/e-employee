@@ -7,7 +7,7 @@ class Pegawai_model extends MY_Model
 {
 
     public $table = 'pegawai';
-    protected $perPage = 6;
+    public $perPage = 9;
 
     public function getValidationRules()
     {
@@ -106,6 +106,18 @@ class Pegawai_model extends MY_Model
                 'label' => 'Penempatan',
                 'rules' => 'required'
             ],
+
+            [
+                'field' => 'tgl_mulai_kontrak',
+                'label' => 'Tanggal Mulai Kontrak',
+                'rules' => 'callback_check_status_pegawai'
+            ],
+
+            [
+                'field' => 'tgl_akhir_kontrak',
+                'label' => 'Tanggal Akhir Kontrak',
+                'rules' => 'callback_check_status_pegawai'
+            ]
 
 
 

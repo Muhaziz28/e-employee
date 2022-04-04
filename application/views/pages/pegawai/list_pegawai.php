@@ -1,6 +1,7 @@
-<div class="row">
+<div class="row" id="result-pegawai">
 
-    <?php foreach ($content as $row) : ?>
+    <?php $i = 1;
+    foreach ($content as $row) : ?>
         <div class="col-lg-4 col-md-12">
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row no-gutters">
@@ -32,13 +33,66 @@
                             <p class="card-text mt-3"><?= $row->alamat; ?></p>
 
                             <?php if ($row->jatah_cuti <= 3) : ?>
-                                <p>Sisa Jatah Cuti : <span class="text-danger"><strong><?= $row->jatah_cuti; ?>&nbsp;Hari</strong></span></p>
+                                <p><strong>Sisa Jatah Cuti :&nbsp;</strong><span class="text-danger"><strong><?= $row->jatah_cuti; ?>&nbsp;Hari</strong></span></p>
                             <?php else : ?>
-                                <p>Sisa Jatah Cuti : <span><?= $row->jatah_cuti; ?>&nbsp;Hari</span></p>
+                                <p><strong>Sisa Jatah Cuti :&nbsp;</strong><span><?= $row->jatah_cuti; ?>&nbsp;Hari</span></p>
                             <?php endif ?>
-                            <a href="<?= base_url("pegawai/edit/$row->nip"); ?>" class="btn btn-primary">Edit</a>
-                            <a href="#" class="btn btn-danger" id="btnDeletePegawai" data-nip="<?= $row->nip; ?>">Hapus</a>
-                            <a href="#" class="btn btn-info" id="btnLihatPegawai" data-nip="<?= $row->nip; ?>">Lihat</a>
+
+                            <?php
+                            //durasi kerja
+                            $tgl_masuk = new DateTime($row->tgl_masuk);
+                            $tgl_sekarang = new DateTime(date('Y-m-d'));
+
+
+                            $diff = date_diff($tgl_masuk, $tgl_sekarang);
+
+                            if ($diff->m == 0 && $diff->y == 0) {
+                                $durasi = 'Kurang dari sebulan';
+                            } else if ($diff->y > 0) {
+                                $durasi = $diff->y . ' tahun ' . $diff->m . ' bulan';
+                            } else {
+                                $durasi = $diff->m . ' bulan ' . $diff->d . ' hari';
+                            }
+
+                            //sisa kontrak
+                            $tgl_mulai_kontrak = new DateTime($row->tgl_mulai_kontrak);
+                            $tgl_akhir_kontrak = new DateTime($row->tgl_akhir_kontrak);
+
+                            $diff2 = date_diff($tgl_mulai_kontrak, $tgl_akhir_kontrak);
+
+                            if ($tgl_akhir_kontrak <= $tgl_sekarang) {
+                                $sisa = '<span class="text-danger">Kontrak Habis</span>';
+                            } else {
+                                $d = $tgl_akhir_kontrak->diff($tgl_sekarang)->days;
+
+                                if ($d <= 3) {
+                                    $sisa = '<span class="text-danger">' . $d . ' hari lagi</span>';
+                                } else {
+                                    $sisa = '<span class="text-body">' . $d . ' hari lagi</span>';
+                                }
+                            }
+
+
+
+                            ?>
+
+
+                            <p><strong>Durasi Kerja :</strong> <?= $durasi; ?></p>
+                            <p><strong>Durasi Kontrak :&nbsp;<?= $row->status_pegawai == "Kontrak" ? $sisa : "-"; ?></strong></p>
+                            <div class="custom-control custom-switch mb-2">
+                                <input type="checkbox" class="custom-control-input" id="bpjsKetenagakerjaan<?= $i; ?>" <?= $row->bpjs_ketenagakerjaan == 1 ? "checked" : "" ?> data-nip="<?= $row->nip; ?>">
+                                <label class="custom-control-label" for="bpjsKetenagakerjaan<?= $i; ?>">BPJS Ketenagakerjaan</label>
+                            </div>
+                            <div class="custom-control custom-switch mb-3">
+                                <input type="checkbox" class="custom-control-input" id="bpjsKesehatan<?= $i; ?>" <?= $row->bpjs_kesehatan == 1 ? "checked" : "" ?> data-nip="<?= $row->nip; ?>">
+                                <label class="custom-control-label" for="bpjsKesehatan<?= $i; ?>">BPJS Kesehatan</label>
+                            </div>
+                            <div class="group-btn">
+                                <a href="<?= base_url("pegawai/edit/$row->nip/$row->id_divisi"); ?>" class="btn btn-primary">Edit</a>
+                                <a href="#" class="btn btn-danger" id="btnDeletePegawai" data-nip="<?= $row->nip; ?>">Hapus</a>
+                                <a href="#" class="btn btn-info" id="btnLihatPegawai" data-nip="<?= $row->nip; ?>">Lihat</a>
+                            </div>
+
 
 
 
@@ -47,7 +101,8 @@
                 </div>
             </div>
         </div>
-    <?php endforeach ?>
+    <?php $i++;
+    endforeach ?>
 
 
 

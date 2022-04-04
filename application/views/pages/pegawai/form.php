@@ -2,9 +2,9 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-warning font-weight-bold"><?= $title; ?></h1>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="./">Home</a></li>
-            <li class="breadcrumb-item">Forms</li>
-            <li class="breadcrumb-item active" aria-current="page">Form Basics</li>
+            <li class="breadcrumb-item"><a href="<?= base_url("dashboard"); ?>">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url("pegawai"); ?>">Pegawai</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="<?= base_url("pegawai/add") ?>"></a>Add Form</li>
         </ol>
     </div>
 
@@ -19,8 +19,7 @@
                     <?= form_open_multipart($form_action, ['method' => 'POST', 'id' => 'formTambahPegawai']); ?>
 
                     <div class="form-group">
-                        <input type="hidden" name="nip" id="nip_pegawai">
-                        <input type="hidden" id="nip_max_pegawai">
+
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="exampleInputEmail1">Nama Lengkap</label>
@@ -67,6 +66,20 @@
                                     </div>
                                     <span id="tgl_lahir_error"></span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="nik_pegawai">NIK</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-list-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="nik_pegawai" name="nik" placeholder="NIK" autocomplete="off">
+                                </div>
+                                <span id="nik_error"></span>
                             </div>
                         </div>
                     </div>
@@ -192,7 +205,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <div class="row">
                             <div class="col-md-8">
                                 <label for="exampleInputEmail1">Durasi Kerja</label>
@@ -216,7 +229,30 @@
 
                             </div>
                         </div>
+                    </div> -->
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="durasi_kerja"> Durasi Kerja</label>
+                                <div id="tambah-pegawai-in-out">
+                                    <div class="input-daterange input-group">
+                                        <input type="text" class="input-sm form-control" name="tgl_mulai_kontrak" id="tgl_mulai_kontrak" placeholder="Tgl Mulai Kontrak" autocomplete="off" disabled />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-secondary" style="border-color: #757575;">s/d</span>
+                                        </div>
+                                        <input type="text" class="input-sm form-control" name="tgl_akhir_kontrak" id="tgl_akhir_kontrak" placeholder="Tgl Berakhir Kontrak" autocomplete="off" disabled />
+
+                                    </div>
+                                    <span id="tgl_mulai_kontrak_error"></span>
+                                    <span class="float-right" id="tgl_akhir_kontrak_error"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+
+
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-12">
@@ -287,6 +323,29 @@
                     <div class="form-group">
                         <div class="row">
                             <div class="col-md-12">
+                                <label for="simpleDataInput">Grade Pegawai</label>
+                                <div class="grade">
+                                    <select class="form-control" id="id_grade_pegawai" name="id_grade">
+                                        <option value="">- Pilih Grade -</option>
+
+
+                                        <!-- <?php foreach ($grade as $row) : ?>
+                                            <option value="<?= $row->id; ?>"><?= $row->title; ?></option>
+                                        <?php endforeach ?> -->
+
+                                    </select>
+                                    <span id="id_grade_error"></span>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
                                 <label for="simpleDataInput">Penempatan</label>
                                 <div class="lokasi">
                                     <select class="form-control" id="id_lokasi_pegawai" name="id_lokasi">
@@ -302,6 +361,24 @@
                             </div>
 
 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="simpleDataInput">Ukuran Baju</label>
+                                <div class="ukuran_baju">
+                                    <select class="form-control" id="id_ukuran_baju_pegawai" name="ukuran_baju">
+                                        <option value="">- Pilih Ukuran Baju -</option>
+                                        <option value="S">S</option>
+                                        <option value="M">M</option>
+                                        <option value="L">L</option>
+                                        <option value="XL">XL</option>
+                                        <option value="XXL">XXL</option>
+                                    </select>
+                                    <span id="id_ukuran_baju_error"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

@@ -126,19 +126,26 @@
                         <td>Durasi Kontrak</td>
                         <td>:</td>
                         <?php
-                        if ($content->satuan_durasi == "month") {
-                            $satuan_durasi = "bulan";
+                        $tgl_sekarang = new DateTime(date("Y-m-d"));
+                        $tgl_akhir_kontrak2 = new DateTime($content->tgl_akhir_kontrak);
+
+                        if ($tgl_akhir_kontrak2 <= $tgl_sekarang) {
+                            $durasi = '<span class="text-danger">(Kontrak Habis)</span>';
                         } else {
-                            $satuan_durasi = "tahun";
+                            $durasi = '<span>(' . $tgl_akhir_kontrak2->diff($tgl_sekarang)->days . ' hari lagi)</span>';
                         }
+
+
+
+                        if ($content->status_pegawai == "Kontrak") {
+                            $tgl_mulai_kontrak = date_format(new DateTime($content->tgl_mulai_kontrak), 'd-m-Y');
+                            $tgl_akhir_kontrak = date_format(new DateTime($content->tgl_akhir_kontrak), 'd-m-Y');
+                        }
+
                         ?>
 
                         <td>
-                            <?php if ($content->status_pegawai == "Kontrak") : ?>
-                                <?= $content->durasi_kerja . " " . $satuan_durasi; ?>
-                            <?php else : ?>
-                                -
-                            <?php endif ?>
+                            <?= isset($tgl_mulai_kontrak) && isset($tgl_akhir_kontrak) ? $tgl_mulai_kontrak . ' s/d ' . $tgl_akhir_kontrak . " $durasi" : "-" ?>
                         </td>
                     </tr>
                 </table>

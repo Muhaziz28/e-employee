@@ -13,7 +13,7 @@
             </div> -->
             <div class="wadahFormPotongCuti">
                 <div id="anim3" class="mx-auto mt-3" style="width: 100px;"></div>
-                <div class="text-center mt-3" id="textAnim3">
+                <div class="text-center mt-3">
                     <p><strong>Harap Tunggu...</strong></p>
                 </div>
             </div>

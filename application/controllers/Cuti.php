@@ -109,10 +109,9 @@ class Cuti extends MY_Controller
                 $data['nama']    = $nama_pegawai;
                 $pusher->trigger('my-channel', 'my-event', $data);
 
-                if ($this->sendMail($this->session->userdata('name'), $this->session->userdata('email'), 'hrd@sorayabedsheet.id', $data_pegawai, $data)) {
+                if ($this->sendMail($this->session->userdata('name'), 'hrd@sorayabedsheet.id', $data_pegawai)) {
                     echo json_encode(array(
                         "statusCode" => 200,
-
                     ));
                 }
             } else {
@@ -162,15 +161,15 @@ class Cuti extends MY_Controller
         return true;
     }
 
-    public function sendMail($nama, $fromEmail, $toEmail, $data_arr)
+    public function sendMail($nama, $toEmail, $data_arr)
     {
         $config = array(
             'mailtype'  => 'html',
             'protocol'  => 'smtp',
-            'smtp_host' => 'smtp.mailtrap.io',
-            'smtp_port' =>  2525,
-            'smtp_user' => '6ac3b9bcd23b5b',
-            'smtp_pass' => '1d60c61c055229',
+            'smtp_host' => 'srv98.niagahoster.com',
+            'smtp_port' =>  587,
+            'smtp_user' => 'admin@sorayabedsheet.id',
+            'smtp_pass' => '26sitebarancakbana',
             'crlf' => "\r\n",
             'newline' => "\r\n"
         );
@@ -178,7 +177,7 @@ class Cuti extends MY_Controller
 
 
         $this->load->library('email', $config);
-        $this->email->from($fromEmail, $nama);
+        $this->email->from('admin@sorayabedsheet.id', $nama);
         $this->email->to($toEmail);
         $this->email->subject('Pengajuan Cuti');
         $this->email->message($this->load->view('email/cuti_notification', $data_arr, true));
@@ -275,10 +274,10 @@ class Cuti extends MY_Controller
         $config = array(
             'mailtype'  => 'html',
             'protocol'  => 'smtp',
-            'smtp_host' => 'smtp.mailtrap.io',
-            'smtp_port' =>  2525,
-            'smtp_user' => '6ac3b9bcd23b5b',
-            'smtp_pass' => '1d60c61c055229',
+            'smtp_host' => 'srv98.niagahoster.com',
+            'smtp_port' =>  587,
+            'smtp_user' => 'admin@sorayabedsheet.id',
+            'smtp_pass' => '26sitebarancakbana',
             'crlf' => "\r\n",
             'newline' => "\r\n"
         );
@@ -423,9 +422,48 @@ class Cuti extends MY_Controller
 
     public function loadTablePotongCutiPegawai()
     {
+
+        $this->cuti->table      = 'pegawai';
+        $data['pegawai']        = $this->cuti->where('nip', $this->session->userdata('nip'))->join('divisi')->join('jabatan')->first();
         $this->cuti->table      = 'potong_cuti';
         $data['content']        =  $this->cuti->where('nip', $this->session->userdata('nip'))->get();
         $this->load->view('pages/cuti/history_potong_cuti_table_ajax', $data);
+    }
+
+    public function riwayat_potong_cuti()
+    {
+        $data['title']          = 'Cuti - Riwayat Pemotongan Cuti Pegawai';
+        $data['nav_title']      = 'cuti';
+        $data['detail_title']   = 'riwayat_potong_cuti';
+
+        $this->cuti->table      = 'pegawai';
+        $data['getPegawai']     = $this->cuti->where('is_out', 1)->get();
+        $data['page']           = 'pages/cuti/riwayat_pemotongan_cuti/index';
+
+        $this->view($data);
+    }
+
+    public function showFormRiwayatPemotonganCuti()
+    {
+        $this->cuti->table      = 'pegawai';
+        $data['getPegawai']     = $this->cuti->where('is_out', 1)->orderBy('created_at', 'DESC')->get();
+        echo $this->load->view('pages/cuti/riwayat_pemotongan_cuti/riwayat_pemotongan_cuti', $data, true);
+    }
+
+    public function resultRiwayatPerubahanGaji($nip)
+    {
+        $this->gaji->table      = 'pegawai';
+        $data['pegawai']        = $this->gaji->where('pegawai.nip', $nip)->join('jabatan')->join('divisi')
+            ->joinGaji('gaji')->first();
+
+        $this->cuti->table      = 'potong_cuti';
+        $data['riwayat']        = $this->cuti->where('nip', $nip)->get();
+        $data['countRiwayat']   = $this->cuti->where('nip', $nip)->count();
+
+        $this->cuti->table      = 'cuti';
+        $data['riwayat_cuti']   = $this->cuti->where('nip_pegawai', $nip)->get();
+
+        $this->load->view('pages/cuti/riwayat_pemotongan_cuti/result', $data);
     }
 }
 

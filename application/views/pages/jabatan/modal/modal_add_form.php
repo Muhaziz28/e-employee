@@ -41,3 +41,9 @@
         <button type="submit" class="btn btn-warning">Kirim</a>
     </div>
 </form>
+
+<script>
+    $(function() {
+        CKEDITOR.replace('ket_jabatan');
+    });
+</script>

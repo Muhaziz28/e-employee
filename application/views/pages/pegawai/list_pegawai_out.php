@@ -13,17 +13,18 @@
                     <div class="col-lg-8">
                         <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
                             <h5 class="card-title" style="margin-bottom: -20px;"><strong><?= $row->nama; ?></strong></h5>
-                            
+
                         </div>
                         <div class="card-body">
 
                             <small>NIP: <?= $row->nip; ?></small>
                             <p><i class="fas fa-briefcase"></i>&nbsp;<?= $row->nama_divisi; ?></p>
                             <p class="card-text mt-3"><?= $row->alamat; ?></p>
+                            <p>Tgl Masuk : <?= date_format(new DateTime($row->tgl_masuk), 'd M Y'); ?></p>
                             <p>Tgl Dikeluarkan : <?= date_format(new DateTime($row->tgl_keluar), "d M Y"); ?></p>
 
-                            <a href="#" class="btn btn-info" id="btnMasukkanPegawai" data-nip="<?= $row->nip; ?>">Masukkan</a>
-
+                            <a href="#" class="btn btn-warning" id="btnMasukkanPegawai" data-nip="<?= $row->nip; ?>">Masukkan</a>
+                            <a href="#" class="btn btn-info" id="btnLihatPegawaiOut" data-nip="<?= $row->nip; ?>">Lihat</a>
 
 
                         </div>

@@ -6,7 +6,7 @@
                 <th>#</th>
                 <th>Nama Jabatan</th>
                 <th>Divisi</th>
-                <th>Keterangan</th>
+                <th style="width: 500px;">Keterangan</th>
                 <th>Action</th>
             </tr>
         </thead>

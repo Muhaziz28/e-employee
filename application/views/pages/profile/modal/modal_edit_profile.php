@@ -15,6 +15,24 @@
             </div>
         </div>
         <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Email</label>
+            <div class="col-sm-9">
+                <input type="email" class="form-control" id="email_edit_profile" placeholder="Email Pegawai" name="email" value="<?= $getPegawai->email; ?>">
+                <span id="email_error"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">Tempat & Tgl Lahir</label>
+            <div class="col-sm-3">
+                <input type="text" class="form-control" id="tempat_lahir_edit_profile" placeholder="Tempat Lahir Pegawai" name="tempat_lahir" value="<?= $getPegawai->tempat_lahir; ?>">
+                <span id="tempat_lahir_error"></span>
+            </div>
+            <div class="col-sm-6">
+                <input type="text" class="form-control" id="tgl_lahir_edit_profile" placeholder="Tanggal Lahir Pegawai" name="tgl_lahir" value="<?= $getPegawai->tgl_lahir; ?>">
+                <span id="tgl_lahir_error"></span>
+            </div>
+        </div>
+        <div class="form-group row">
             <label for="inputEmail3" class="col-sm-3 col-form-label">Password</label>
             <div class="col-sm-9">
                 <input type="password" class="form-control" id="password_edit_profile" placeholder="Password (isi jika ingin mengubah password)" name="password">
@@ -28,7 +46,7 @@
                 <span id="confirm_password_error"></span>
             </div>
         </div>
-        
+
 
 
     </div>
@@ -37,3 +55,12 @@
         <button type="submit" class="btn btn-warning">Kirim</a>
     </div>
 </form>
+
+<script>
+    $('#tgl_lahir_edit_profile').datepicker({
+        format: 'yyyy-mm-dd',
+        todayBtn: 'linked',
+        todayHighlight: true,
+        autoclose: true,
+    });
+</script>

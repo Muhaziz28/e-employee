@@ -5,35 +5,35 @@ class Home extends MY_Controller
 {
 
 
-	public function __construct()
-	{
-		parent::__construct();
-		$is_login = $this->session->userdata('is_login');
-		$role = $this->session->userdata('role');
+    public function __construct()
+    {
+        parent::__construct();
+        $is_login = $this->session->userdata('is_login');
+        $role = $this->session->userdata('role');
 
-		if ($is_login != true) {
-			redirect(base_url());
-			return;
-		} else {
-			if ($role == 'hrd') {
-				redirect(base_url("dashboard"));
-				return;
-			} else {
-				
-				return;
-			}
-		}
+        if ($is_login != true) {
+            redirect(base_url());
+            return;
+        } else {
+            if ($role == 'hrd') {
+                redirect(base_url("dashboard"));
+                return;
+            } else {
 
-		//Do your magic here
-	}
+                return;
+            }
+        }
 
-	public function index()
-	{
-		$data['title']          = 'Home';
-		$data['nav_title']      = 'home';
-		$data['detail_title']   = 'home';
-		$data['page'] 			= 'pages/home/index';
+        //Do your magic here
+    }
 
-		$this->view($data);
-	}
+    public function index()
+    {
+        $data['title']          = 'Home';
+        $data['nav_title']      = 'home';
+        $data['detail_title']   = 'home';
+        $data['page']             = 'pages/home/index';
+
+        $this->view($data);
+    }
 }

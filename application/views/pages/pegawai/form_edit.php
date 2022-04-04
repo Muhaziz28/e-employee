@@ -2,9 +2,9 @@
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 class="h3 mb-0 text-warning font-weight-bold"><?= $title; ?></h1>
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="./">Home</a></li>
-            <li class="breadcrumb-item">Forms</li>
-            <li class="breadcrumb-item active" aria-current="page">Form Basics</li>
+            <li class="breadcrumb-item"><a href="<?= base_url("dashboard"); ?>">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="<?= base_url("pegawai"); ?>">Pegawai</a></li>
+            <li class="breadcrumb-item active" aria-current="page"><a href="<?= base_url("pegawai/edit") ?>"></a>Edit Form</li>
         </ol>
     </div>
 
@@ -67,6 +67,20 @@
                                     </div>
                                     <span id="tgl_lahir_error"></span>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="nik_pegawai">NIK</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="fas fa-list-alt"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" id="nik_pegawai" name="nik" placeholder="NIK" autocomplete="off" value="<?= $input->nik; ?>">
+                                </div>
+                                <span id="nik_error"></span>
                             </div>
                         </div>
                     </div>
@@ -180,26 +194,20 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div class="col-md-8">
-                                <label for="exampleInputEmail1">Durasi Kerja</label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text"><i class="fas fa-clock"></i></span>
+                            <div class="col-md-12">
+                                <label for="durasi_kerja"> Durasi Kerja</label>
+                                <div id="tambah-pegawai-in-out">
+                                    <div class="input-daterange input-group">
+                                        <input type="text" class="input-sm form-control" name="tgl_mulai_kontrak" id="tgl_mulai_kontrak" value="<?= $input->tgl_mulai_kontrak; ?>" placeholder="Tgl Mulai Kontrak" <?= $input->status_pegawai == "Tetap" ? "disabled" : "" ?> />
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text bg-secondary" style="border-color: #757575;">s/d</span>
+                                        </div>
+                                        <input type="text" class="input-sm form-control" name="tgl_akhir_kontrak" id="tgl_akhir_kontrak" value="<?= $input->tgl_akhir_kontrak; ?>" placeholder="Tgl Berakhir Kontrak" <?= $input->status_pegawai == "Tetap" ? "disabled" : "" ?> />
                                     </div>
-                                    <input type="number" class="form-control" id="durasi_kerja_pegawai" name="durasi_kerja" value="<?= isset($input->durasi_kerja) ? $input->durasi_kerja : "" ?>" placeholder="Durasi" <?= $input->status_pegawai == "Kontrak" ? "" : "disabled" ?>>
+
+                                    <span id="tgl_mulai_kontrak_error"></span>
+                                    <span class="float-right" id="tgl_akhir_kontrak_error"></span>
                                 </div>
-
-                            </div>
-                            <div class="col-md-4">
-                                <label for="simpleDataInput">Satuan Durasi</label>
-                                <select class="form-control" id="satuan_durasi_pegawai" name="satuan_durasi" <?= $input->status_pegawai == "Kontrak" ? "" : "disabled" ?>>
-                                    <option value="">- Pilih Satuan Durasi -</option>
-                                    <option value="month" <?= $input->satuan_durasi == "month" ? "selected" : "" ?>>Bulan</option>
-                                    <option value="year" <?= $input->satuan_durasi == "year" ? "selected" : "" ?>>Tahun</option>
-
-
-                                </select>
-
                             </div>
                         </div>
                     </div>
@@ -289,6 +297,24 @@
                             </div>
 
 
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="simpleDataInput">Ukuran Baju</label>
+                                <div class="ukuran_baju">
+                                    <select class="form-control" id="id_ukuran_baju_pegawai" name="ukuran_baju">
+                                        <option value="">- Pilih Ukuran Baju -</option>
+                                        <option value="S" <?= $input->ukuran_baju == "S" ? "selected" : "" ?>>S</option>
+                                        <option value="M" <?= $input->ukuran_baju == "M" ? "selected" : "" ?>>M</option>
+                                        <option value="L" <?= $input->ukuran_baju == "L" ? "selected" : "" ?>>L</option>
+                                        <option value="XL" <?= $input->ukuran_baju == "XL" ? "selected" : "" ?>>XL</option>
+                                        <option value="XXL" <?= $input->ukuran_baju == "XXL" ? "selected" : "" ?>>XXL</option>
+                                    </select>
+                                    <span id="id_ukuran_baju_error"></span>
+                                </div>
+                            </div>
                         </div>
                     </div>
 

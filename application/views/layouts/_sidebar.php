@@ -23,6 +23,28 @@
         <hr class="sidebar-divider">
     <?php endif ?>
 
+    <?php if ($role == 'leader_finance' || $role == 'leader' || $role == 'leader_toko') : ?>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Main
+        </div>
+        <li class="nav-item <?= $nav_title == "aktivitas" ? "active" : "" ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAktivitas" aria-expanded="true" aria-controls="collapseAktivitas">
+                <i class="fas fa-laptop"></i>
+                <span>Aktivitas Pegawai</span>
+            </a>
+            <div id="collapseAktivitas" class="collapse <?= $nav_title == "aktivitas" ? "show" : "" ?>"" aria-labelledby=" headingAktivitas" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Aktivitas</h6>
+                    <a class="collapse-item <?= $detail_title == "aktivitas" ? "active" : "" ?>" href="<?= base_url("activity"); ?>">Lihat Aktivitas</a>
+                    <a class="collapse-item <?= $detail_title == "rekap_aktivitas" ? "active" : "" ?>" href="<?= base_url("activity/rekap"); ?>">Rekap Pengisian Aktivitas</a>
+
+
+
+                </div>
+            </div>
+        </li>
+    <?php endif ?>
 
     <?php if ($role == 'hrd') : ?>
 
@@ -55,11 +77,73 @@
                     <h6 class="collapse-header">Cuti</h6>
                     <a class="collapse-item <?= $detail_title == "cuti" ? "active" : "" ?>" href="<?= base_url("cuti"); ?>">Daftar Cuti</a>
                     <a class="collapse-item <?= $detail_title == "potong_cuti" ? "active" : "" ?>" href="<?= base_url("cuti/potong"); ?>">Potong Cuti</a>
+                    <a class="collapse-item <?= $detail_title == "riwayat_potong_cuti" ? "active" : "" ?>" href="<?= base_url("cuti/riwayat_potong_cuti"); ?>">Riwayat Pemotongan Cuti</a>
 
 
                 </div>
             </div>
         </li>
+
+        <li class="nav-item <?= $nav_title == "gaji" ? "active" : "" ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseGaji" aria-expanded="true" aria-controls="collapseGaji">
+                <i class="fas fa-money-check-alt"></i>
+                <span>Gaji</span>
+            </a>
+            <div id="collapseGaji" class="collapse <?= $nav_title == "gaji" ? "show" : "" ?>"" aria-labelledby=" headingGaji" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Gaji</h6>
+                    <!-- <a class="collapse-item <?= $detail_title == "gaji" ? "active" : "" ?>" href="<?= base_url("cuti"); ?>">Daftar Cuti</a> -->
+                    <a class="collapse-item <?= $detail_title == "daftar_gaji" ? "active" : "" ?>" href="<?= base_url("gaji"); ?>">Daftar Gaji</a>
+                    <a class="collapse-item <?= $detail_title == "perubahan_gaji" ? "active" : "" ?>" href="<?= base_url("gaji/riwayat_perubahan_gaji"); ?>">Riwayat Perubahan Gaji</a>
+                    <a class="collapse-item <?= $detail_title == "slip_gaji" ? "active" : "" ?>" href="<?= base_url("gaji/slip"); ?>">Tambah Slip Gaji</a>
+                    <a class="collapse-item <?= $detail_title == "view_slip_gaji" ? "active" : "" ?>" href="<?= base_url("gaji/view_slip_gaji"); ?>">Lihat Slip Gaji</a>
+
+
+
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item <?= $nav_title == "kpi" ? "active" : "" ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseKpi" aria-expanded="true" aria-controls="collapseKpi">
+                <i class="fas fa-pen-alt"></i>
+                <span>KPI</span>
+            </a>
+            <div id="collapseKpi" class="collapse <?= $nav_title == "kpi" ? "show" : "" ?>"" aria-labelledby=" headingKpi" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">KPI</h6>
+                    <a class="collapse-item <?= $detail_title == "daftar_kpi" ? "active" : "" ?>" href="<?= base_url("kpi"); ?>">Daftar Nilai KPI</a>
+                    <a class="collapse-item <?= $detail_title == "tambah_kpi" ? "active" : "" ?>" href="<?= base_url("kpi/nilai"); ?>">Tambah Nilai KPI</a>
+
+
+
+                </div>
+            </div>
+        </li>
+
+        <li class="nav-item <?= $nav_title == "aktivitas" ? "active" : "" ?>">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseAktivitas" aria-expanded="true" aria-controls="collapseAktivitas">
+                <i class="fas fa-laptop"></i>
+                <span>Aktivitas Pegawai</span>
+            </a>
+            <div id="collapseAktivitas" class="collapse <?= $nav_title == "aktivitas" ? "show" : "" ?>"" aria-labelledby=" headingAktivitas" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Aktivitas</h6>
+                    <a class="collapse-item <?= $detail_title == "aktivitas" ? "active" : "" ?>" href="<?= base_url("activity"); ?>">Lihat Aktivitas</a>
+                    <a class="collapse-item <?= $detail_title == "rekap_aktivitas" ? "active" : "" ?>" href="<?= base_url("activity/rekap"); ?>">Rekap Pengisian Aktivitas</a>
+
+
+
+                </div>
+            </div>
+        </li>
+
+        <!-- <li class="nav-item <?= $nav_title == "aktivitas" ? "active" : "" ?>">
+            <a class="nav-link" href="<?= base_url("activity") ?>">
+                <i class="fas fa-laptop"></i>
+                <span>Aktivitas Pegawai</span>
+            </a>
+        </li> -->
 
         <hr class="sidebar-divider">
         <div class="sidebar-heading">
@@ -119,8 +203,30 @@
                 </div>
             </div>
         </li>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Report
+        </div>
+        <li class="nav-item <?= $nav_title == "report" ? "active" : "" ?>">
+            <a class="nav-link" href="<?= base_url("report") ?>">
+                <i class="fas fa-file-alt"></i>
+                <span>Laporan Pegawai In Out</span>
+            </a>
+        </li>
     <?php endif ?>
 
+    <?php if ($role == 'pegawai') : ?>
+        <hr class="sidebar-divider">
+        <div class="sidebar-heading">
+            Activity
+        </div>
+        <li class="nav-item <?= $nav_title == "aktivitas" ? "active" : "" ?>">
+            <a class="nav-link" href="<?= base_url("activity") ?>">
+                <i class="fas fa-laptop"></i>
+                <span>Aktivitas Saya</span>
+            </a>
+        </li>
+    <?php endif ?>
     <hr class="sidebar-divider">
     <div class="sidebar-heading">
         Profile
